@@ -26,7 +26,7 @@ export default class World {
     }
 
     setStartingScreen() {
-        this.resources.on('progess', (percent) => this.loadingPage.setProgress(percent));
+        this.resources.on('progess', (percent) => LoadingPage.setProgress(percent));
         this.resources.on('ready', () => this.start());
     }
 
@@ -35,7 +35,7 @@ export default class World {
         this.materials.setMaterials();
 
         this.setRole();
-        // this.setParticles();
+        this.setParticles();
     }
 
     setRole() {
