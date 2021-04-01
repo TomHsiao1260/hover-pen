@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+/* eslint-disable */
 export default class Particles {
     constructor(_option) {
         this.time = _option.time;

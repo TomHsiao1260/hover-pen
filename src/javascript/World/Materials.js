@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 import LoadingPageMaterial from '../Materials/LoadingPage';
 import ParticlesMaterial from '../Materials/Particles';
 

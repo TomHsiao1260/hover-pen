@@ -16,10 +16,10 @@ export default class LoadingPage {
         this.material = this.materials.items.shader.loadingPage;
 
         this.instance = new THREE.Mesh(this.geometry, this.material);
-        this.container.add( this.instance );
+        this.container.add(this.instance);
     }
 
-    setProgress(percent) {
+    static setProgress(percent) {
         console.log(`progress ${percent}/100`);
     }
 

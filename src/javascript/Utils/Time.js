@@ -1,5 +1,5 @@
-import EventEmitter from './EventEmitter';
 import Stats from 'stats.js';
+import EventEmitter from './EventEmitter';
 
 export default class Time extends EventEmitter {
     constructor() {

@@ -68,7 +68,7 @@ export default class Application {
         });
 
         this.scene.add(this.camera.container);
-        this.time.on('tick', () => this.renderer.render(this.scene, this.camera.instance) );
+        this.time.on('tick', () => this.renderer.render(this.scene, this.camera.instance));
     }
 
     setLight() {

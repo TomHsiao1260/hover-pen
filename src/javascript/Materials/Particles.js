@@ -6,7 +6,7 @@ import fragmentShader from '../../shaders/particles/fragment.glsl';
 export default function particlesMaterial() {
     const uniforms = {
         uTime: { value: 0 },
-        uSize: { value: 30 * window.application.renderer.getPixelRatio() }
+        uSize: { value: 30 * window.application.renderer.getPixelRatio() },
     };
 
     const material = new THREE.ShaderMaterial({

@@ -34,6 +34,6 @@ export default class Camera {
         this.controls.target = new THREE.Vector3(0, 0, 0);
         this.controls.enableDamping = true;
 
-        this.time.on('tick', () => this.controls.update() );
+        this.time.on('tick', () => this.controls.update());
     }
 }
