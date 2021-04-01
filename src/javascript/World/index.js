@@ -35,7 +35,7 @@ export default class World {
         this.materials.setMaterials();
 
         this.setRole();
-        this.setParticles();
+        // this.setParticles();
     }
 
     setRole() {

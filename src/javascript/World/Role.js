@@ -9,6 +9,8 @@ export default class Role {
         this.container.matrixAutoUpdate = false;
 
         this.setRole();
+        this.setTraverse();
+        this.setAnimation();
     }
 
     setRole() {
@@ -18,53 +20,39 @@ export default class Role {
         this.instance.position.set(0, -5, 0);
         this.instance.rotation.y = Math.PI * 1.2;
         this.container.add(this.instance);
-
-        this.setTraverse();
     }
 
     setTraverse() {
-        let pen = null;
-        let penPeak = null;
-        let penBody = null;
-
         this.instance.traverse((child) => {
             switch (child.name) {
-                case 'pen': pen = child; break;
-                case 'penPeak': penPeak = child; break;
-                case 'penBody': penBody = child; break;
+                case 'pen': this.pen = child; break;
+                case 'penPeak': this.penPeak = child; break;
+                case 'penBody': this.penBody = child; break;
                 default: break;
             }
-
-            // if (child instanceof THREE.Mesh) {
-            //     if (child.material instanceof THREE.MeshStandardMaterial) {
-            //     }
-            // }
         });
 
-        const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-        const material = new THREE.MeshBasicMaterial({ color: 'white' });
+        this.instancePen = new THREE.Object3D();
+        this.instancePen.name = 'pen instance';
+        this.instancePen.rotation.x = Math.PI / 20;
 
-        const mesh1 = new THREE.Mesh(geometry, material);
-        const mesh2 = new THREE.Mesh(geometry, material);
+        while (this.pen.children.length) {
+            this.instancePen.add(this.pen.children[0]);
+        }
 
-        mesh1.position.copy(penPeak.position);
-        mesh2.position.copy(penBody.position);
-        mesh2.rotation.x = Math.PI / 4;
-        mesh1.rotation.x = Math.PI / 2;
+        this.pen.add(this.instancePen);
 
-        // const axis = penPeak.position.clone().sub(penBody.position).normalize();
-
-        // pen.add(mesh1, mesh2)
         const axes1 = new THREE.AxesHelper();
         const axes2 = new THREE.AxesHelper();
 
-        pen.add(axes1);
-        window.application.scene.add(axes2);
+        this.pen.add(axes1);
+        this.instancePen.add(axes2);
+    }
 
+    setAnimation() {
         this.time.on('tick', () => {
-            // pen.rotateOnAxis(axis, this.time.delta * 0.0001)
-            pen.rotateOnWorldAxis(new THREE.Vector3(0, 0, 1), 0.01);
-            // pen.rotateOnAxis(new THREE.Vector3(0, 0, 1), 0.01)
+            this.pen.rotateOnAxis(new THREE.Vector3(0, 1, 0), this.time.delta * 0.001);
+            // pen.rotateOnWorldAxis(new THREE.Vector3(0, 0, 1), 0.01);
         });
     }
 }
