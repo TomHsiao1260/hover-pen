@@ -9,7 +9,7 @@ export default class Light {
 
         if (this.debug) {
             this.debugFolder = this.debug.addFolder('light');
-            this.debugFolder.open();
+            // this.debugFolder.open();
         }
 
         this.setInstance();

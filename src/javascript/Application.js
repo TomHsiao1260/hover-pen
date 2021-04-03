@@ -61,10 +61,12 @@ export default class Application {
 
     setCamera() {
         this.camera = new Camera({
+            resources: this.resources,
             time: this.time,
             sizes: this.sizes,
             renderer: this.renderer,
             canvas: this.$canvas,
+            debug: this.debug,
         });
 
         this.scene.add(this.camera.container);
@@ -84,6 +86,7 @@ export default class Application {
             time: this.time,
             sizes: this.sizes,
             camera: this.camera,
+            debug: this.debug,
         });
 
         this.scene.add(this.world.container);

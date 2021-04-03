@@ -11,6 +11,7 @@ export default class World {
         this.time = _option.time;
         this.sizes = _option.sizes;
         this.camera = _option.camera;
+        this.debug = _option.debug;
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
@@ -42,6 +43,7 @@ export default class World {
         this.role = new Role({
             resources: this.resources,
             time: this.time,
+            debug: this.debug,
         });
 
         this.container.add(this.role.container);
