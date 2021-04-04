@@ -31,11 +31,9 @@ export default class Camera {
         this.container.add(this.instance);
 
         if (this.debug) {
-            /* eslint-disable newline-per-chained-call */
             this.debugFolder.add(this.instance.position, 'x').min(-20).max(20).step(0.1).name('positionX');
             this.debugFolder.add(this.instance.position, 'y').min(-20).max(20).step(0.1).name('positionY');
             this.debugFolder.add(this.instance.position, 'z').min(-20).max(20).step(0.1).name('positionZ');
-            /* eslint-disable newline-per-chained-call */
         }
 
         this.sizes.on('resize', () => {

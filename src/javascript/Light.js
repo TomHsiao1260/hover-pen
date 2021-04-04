@@ -28,7 +28,6 @@ export default class Light {
         this.container.add(this.pointLight);
 
         if (this.debug) {
-            /* eslint-disable newline-per-chained-call */
             this.debugFolder.add(this.directionalLight.position, 'x').min(-10).max(10).step(0.1).name('directX');
             this.debugFolder.add(this.directionalLight.position, 'y').min(-10).max(10).step(0.1).name('directY');
             this.debugFolder.add(this.directionalLight.position, 'z').min(-10).max(10).step(0.1).name('directZ');
@@ -38,7 +37,6 @@ export default class Light {
             this.debugFolder.add(this.ambientLight, 'intensity').min(0).max(10).step(0.001).name('ambientIntensity');
             this.debugFolder.add(this.pointLight, 'intensity').min(0).max(20).step(0.001).name('pointIntensity');
             this.debugFolder.add(this.directionalLight, 'intensity').min(0).max(20).step(0.001).name('directionalIntensity');
-            /* eslint-disable newline-per-chained-call */
         }
     }
 }

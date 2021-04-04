@@ -87,6 +87,7 @@ export default class Application {
             sizes: this.sizes,
             camera: this.camera,
             debug: this.debug,
+            light: this.light,
         });
 
         this.scene.add(this.world.container);
