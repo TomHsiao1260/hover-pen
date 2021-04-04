@@ -49,7 +49,7 @@ export default class Camera {
         this.timeline = gsap.timeline();
 
         this.path = [];
-        this.path.push({ duration: 10, point: new THREE.Vector3(4.0, 13.0, 10.0) });
+        this.path.push({ duration: 10, point: new THREE.Vector3(6.6, 12, 5.0) });
         this.path.push({ duration: 5, point: new THREE.Vector3(1.1, 3.3, 11.0) });
 
         this.resources.on('ready', async () => {

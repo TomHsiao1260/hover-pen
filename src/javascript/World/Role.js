@@ -21,10 +21,14 @@ export default class Role {
 
     setRole() {
         this.instance = this.resources.items.pen.scene;
+        this.parameters = {};
+        this.parameters.rotate = 1.2;
+        this.parameters.tilt = 0.001;
+        this.parameters.speed = 0.0005;
 
         this.instance.scale.set(3, 3, 3);
         this.instance.position.set(0, 0, 0);
-        this.instance.rotation.y = Math.PI * 1.2;
+        this.instance.rotation.y = Math.PI * this.parameters.rotate;
         this.container.add(this.instance);
     }
 
@@ -50,7 +54,7 @@ export default class Role {
 
         this.instancePen = new THREE.Object3D();
         this.instancePen.name = 'pen instance';
-        this.instancePen.rotation.x = Math.PI / 20;
+        this.instancePen.rotation.x = Math.PI * this.parameters.tilt;
 
         while (this.pen.children.length) {
             this.instancePen.add(this.pen.children[0]);
@@ -63,13 +67,24 @@ export default class Role {
             const axes2 = new THREE.AxesHelper();
             this.pen.add(axes1);
             this.instancePen.add(axes2);
+
+            /* eslint-disable newline-per-chained-call */
+            this.debugFolder.add(this.parameters, 'speed').min(0).max(0.01).step(0.00001).name('speed');
+            this.debugFolder.add(this.parameters, 'rotate').min(0).max(2).step(0.01).name('rotate').onChange(() => this.setParameters());
+            this.debugFolder.add(this.parameters, 'tilt').min(0).max(0.2).step(0.001).name('tilt').onChange(() => this.setParameters());
+            /* eslint-disable newline-per-chained-call */
         }
     }
 
     setAnimation() {
         this.time.on('tick', () => {
-            this.pen.rotateOnAxis(new THREE.Vector3(0, 1, 0), this.time.delta * 0.001);
-            // pen.rotateOnWorldAxis(new THREE.Vector3(0, 0, 1), 0.01);
+            const theta = this.time.delta * this.parameters.speed;
+            this.pen.rotateOnAxis(new THREE.Vector3(0, 1, 0), theta);
         });
+    }
+
+    setParameters() {
+        this.instance.rotation.y = Math.PI * this.parameters.rotate;
+        this.instancePen.rotation.x = Math.PI * this.parameters.tilt;
     }
 }
