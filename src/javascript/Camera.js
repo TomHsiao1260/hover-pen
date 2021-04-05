@@ -19,15 +19,15 @@ export default class Camera {
         }
 
         this.setInstance();
-        // this.setTransition();
+        this.setTransition();
         this.setControls();
     }
 
     setInstance() {
         const { width, height } = this.sizes.viewport;
         this.instance = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-        this.instance.position.set(1.1, 3.3, 11);
-        // this.instance.position.set(-2.0, -1.2, -2.2);
+        // this.instance.position.set(1.1, 3.3, 11);
+        this.instance.position.set(-2.0, -1.2, -2.2);
         this.container.add(this.instance);
 
         if (this.debug) {

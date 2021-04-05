@@ -49,7 +49,7 @@ export default class World {
 
         this.setRole();
         this.setLabels();
-        // this.setParticles();
+        this.setParticles();
     }
 
     setRole() {
@@ -79,6 +79,10 @@ export default class World {
     setParticles() {
         this.particles = new Particles({
             time: this.time,
+            role: this.role,
+            controls: this.controls,
+            camera: this.camera,
+            debug: this.debug,
             materials: this.materials,
         });
 

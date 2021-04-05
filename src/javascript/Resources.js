@@ -2,6 +2,7 @@ import Loader from './Utils/Loader';
 import EventEmitter from './Utils/EventEmitter';
 
 import penSource from '../models/role/pen.glb';
+import spotSource from '../models/particles/spot.png';
 
 export default class Resources extends EventEmitter {
     constructor() {
@@ -26,6 +27,7 @@ export default class Resources extends EventEmitter {
 
         this.loader.load([
             { name: 'pen', source: penSource },
+            { name: 'spot', source: spotSource },
         ]);
     }
 }

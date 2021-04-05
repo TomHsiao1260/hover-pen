@@ -16,8 +16,8 @@ export default class Labels {
             // this.debugFolder.open();
         }
 
-        this.setDOM();
-        this.setLabels();
+        // this.setDOM();
+        // this.setLabels();
     }
 
     setDOM() {

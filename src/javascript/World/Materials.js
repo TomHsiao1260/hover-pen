@@ -15,6 +15,8 @@ export default class Materials {
     }
 
     setMaterials() {
-        this.items.shader.particles = new ParticlesMaterial();
+        this.items.shader.particles = new ParticlesMaterial({
+            resources: this.resources,
+        });
     }
 }
