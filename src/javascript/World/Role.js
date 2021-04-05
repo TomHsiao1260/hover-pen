@@ -19,8 +19,7 @@ export default class Role {
         this.setRole();
         this.setTraverse();
         this.setPenGroup();
-        this.setColor();
-        this.setLabel();
+        // this.setColor();
         this.setAnimation();
     }
 
@@ -111,16 +110,6 @@ export default class Role {
                 this.colorIndex %= this.colors.length;
             }
         });
-    }
-
-    setLabel() {
-        const axes1 = new THREE.AxesHelper(0.5);
-        const axes2 = new THREE.AxesHelper(0.5);
-
-        if (this.debug) {
-            this.label1.add(axes1);
-            this.label2.add(axes2);
-        }
     }
 
     setAnimation() {

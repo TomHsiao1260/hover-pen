@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 import LoadingPage from './LoadingPage';
 import Controls from './Controls';
+import Labels from './Labels';
 import Particles from './Particles';
 import Materials from './Materials';
 import Role from './Role';
@@ -47,6 +48,7 @@ export default class World {
         this.materials.setMaterials();
 
         this.setRole();
+        this.setLabels();
         // this.setParticles();
     }
 
@@ -60,6 +62,18 @@ export default class World {
         });
 
         this.container.add(this.role.container);
+    }
+
+    setLabels() {
+        this.labels = new Labels({
+            role: this.role,
+            time: this.time,
+            debug: this.debug,
+            sizes: this.sizes,
+            camera: this.camera,
+        });
+
+        this.container.add(this.labels.container);
     }
 
     setParticles() {
