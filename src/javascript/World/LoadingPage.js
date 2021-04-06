@@ -45,10 +45,12 @@ export default class LoadingPage {
         console.log(`progress ${percent}/100`);
     }
 
-    setFinish() {
-        window.setTimeout(() => {
-            this.trademark.classList.add('fadeout');
-            gsap.to(this.material.uniforms.uAlpha, { duration: 3, value: 0, delay: 1 });
-        }, 500);
+    async setFinish() {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        gsap.to(this.material.uniforms.uAlpha, { duration: 3, value: 0, delay: 1 });
+        this.trademark.classList.add('fadeout');
+
+        await new Promise((resolve) => setTimeout(resolve, 6000));
+        this.trademark.style.display = 'none';
     }
 }
