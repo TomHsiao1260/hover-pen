@@ -54,6 +54,7 @@ export default class Role {
             }
             if (this.debug) this.debugFolder.add(child, 'visible').name(child.name);
         });
+        console.log(this.penBody);
     }
 
     setPenGroup() {
@@ -93,6 +94,7 @@ export default class Role {
         this.colors = [];
         this.colors.push({ color: '#040c4a', metalness: 0.95, lightIntensity: 4.0 });
         this.colors.push({ color: '#043737', metalness: 0.95, lightIntensity: 4.0 });
+        this.colors.push({ color: '#8680f0', metalness: 1.00, lightIntensity: 0.0 });
         this.colors.push({ color: '#000000', metalness: 0.00, lightIntensity: 0.0 });
 
         this.colorIndex = 0;

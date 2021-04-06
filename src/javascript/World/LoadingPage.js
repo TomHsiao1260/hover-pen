@@ -9,6 +9,7 @@ export default class LoadingPage {
         this.container.matrixAutoUpdate = false;
 
         this.setLoadingPage();
+        this.setTrademark();
     }
 
     setLoadingPage() {
@@ -19,12 +20,34 @@ export default class LoadingPage {
         this.container.add(this.instance);
     }
 
+    setTrademark() {
+        this.trademark = document.querySelector('.trademark');
+
+        this.markSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.markSVG.setAttributeNS(null, 'viewBox', '0 0 100 100');
+        this.trademark.appendChild(this.markSVG);
+
+        this.markPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        this.markPath.setAttributeNS(null, 'd', 'M35 90 L10 90 L33 10 L50 50 L60 25 L90 80');
+        this.markPath.setAttributeNS(null, 'fill-opacity', 0);
+        this.markPath.setAttributeNS(null, 'stroke', 'white');
+        this.markPath.setAttributeNS(null, 'stroke-width', 7);
+        this.markPath.setAttributeNS(null, 'class', 'path');
+        this.markSVG.appendChild(this.markPath);
+
+        this.title = document.createElement('div');
+        this.title.setAttribute('class', 'title');
+        this.title.innerText = 'SHANPO';
+        this.trademark.appendChild(this.title);
+    }
+
     static setProgress(percent) {
         console.log(`progress ${percent}/100`);
     }
 
     setFinish() {
         window.setTimeout(() => {
+            this.trademark.classList.add('fadeout');
             gsap.to(this.material.uniforms.uAlpha, { duration: 3, value: 0, delay: 1 });
         }, 500);
     }
