@@ -59,6 +59,7 @@
     top: 100%;
     left: 50%;
     transform: translate(-45%, -50%);
+    font-family: Helvetica, Arial, sans-serif;
     animation: blink 2s ease-in-out infinite;
     animation-direction: alternate;
 } 
