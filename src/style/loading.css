@@ -34,14 +34,14 @@
 {
     stroke-dasharray: 250;
     stroke-dashoffset: 250;
-    animation: dash 2.5s ease-out infinite;
+    animation: dash 2s ease-out infinite;
 }  
 
 @keyframes dash {
     0% {
         stroke-dashoffset: 250;
     }
-    50% {
+    40% {
         stroke-dashoffset: 0;
     }
     100% {

@@ -54,7 +54,6 @@ export default class Role {
             }
             if (this.debug) this.debugFolder.add(child, 'visible').name(child.name);
         });
-        console.log(this.penBody);
     }
 
     setPenGroup() {
@@ -66,6 +65,13 @@ export default class Role {
         this.pen.add(this.instancePen);
 
         if (this.debug) {
+            this.penAxes = new THREE.AxesHelper();
+            this.instancePenAxes = new THREE.AxesHelper();
+            this.pen.add(this.penAxes);
+            this.instancePen.add(this.instancePenAxes);
+
+            this.debugFolder.add(this.penAxes, 'visible').name('penAxes');
+            this.debugFolder.add(this.instancePenAxes, 'visible').name('instancePenAxes');
             this.debugFolder.add(this.parameters, 'speed').min(0).max(0.01).step(0.00001).name('speed');
 
             this.debugFolder.add(this.parameters, 'rotate').min(0).max(2).step(0.01).name('rotate')
@@ -92,9 +98,7 @@ export default class Role {
         this.rayColorMeshes.push(this.ring);
 
         this.colors = [];
-        this.colors.push({ color: '#040c4a', metalness: 0.95, lightIntensity: 4.0 });
-        this.colors.push({ color: '#043737', metalness: 0.95, lightIntensity: 4.0 });
-        this.colors.push({ color: '#8680f0', metalness: 1.00, lightIntensity: 0.0 });
+        this.colors.push({ color: '#292934', metalness: 0.90, lightIntensity: 2.0 });
         this.colors.push({ color: '#000000', metalness: 0.00, lightIntensity: 0.0 });
 
         this.colorIndex = 0;
