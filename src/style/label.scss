@@ -1,30 +1,84 @@
+$max-width: 150px;
+
 .points
 {
     position: absolute;
     top: 50%;
     left: 50%;
-    .point
+    .container
     {
         position: absolute;
         top: 0px;
         left: 0px;
-        width: 100px;
-        text-align: center;
-        padding: 20px;
-        border-radius: 10px;
-        background: #00000077;
-        border: 1px solid #ffffff77;
-        color: #ffffff;
-        line-height: 1.3em;
-        font-family: Helvetica, Arial, sans-serif;
-        font-weight: 100;
-        font-size: 14px;
-        opacity: 0;
-        transform: scale(0, 0);
-        transition: opacity 0.3s ease-in-out;
-        &.visible
+        width: $max-width;
+        height: 0;
+        padding: 0;
+        margin: 0;
+        .point
         {
-            opacity: 1;
+            // https://css-tricks.com/snippets/css/typewriter-effect/
+            position: absolute;
+            padding: 1px;
+            margin: 0;
+            color: #ccffff;
+            letter-spacing: 0.05em;
+            font-size: 15px;
+            opacity: 0;
+            font-family: Helvetica, Arial, sans-serif;
+            border-right: 2px solid transparent;
+            border-left: 2px solid transparent;
+            text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0);
+            white-space: nowrap;
+            overflow: hidden;
+            transition: opacity 0.8s ease-in-out;
+            &.left
+            {
+                left: 0;
+                text-align: left;
+                &.typing {
+                    animation: typing 2s steps(40),
+                    cursorLeft 0.5s steps(40) 10;
+                }
+            }
+            &.right
+            {
+                right: 0;
+                text-align: right;
+                &.typing {
+                    animation: typing 2s steps(40),
+                    cursorRight 0.5s steps(40) 10;
+                }
+            }
+            &.visible
+            {
+                opacity: 0.8;
+            }
         }
+    }
+}
+
+@keyframes typing {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: $max-width;
+    }
+}
+
+@keyframes cursorRight{
+    0% {
+        border-right-color: rgba(255,255,255,.75);
+    }
+    100% {
+        border-right-color: transparent;
+    }
+}
+@keyframes cursorLeft{
+    0% {
+        border-left-color: rgba(255,255,255,.75);
+    }
+    100% {
+        border-left-color: transparent;
     }
 }
