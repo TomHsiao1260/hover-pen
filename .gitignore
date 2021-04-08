@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
 dist
-blender
 public
+blender/*.blend1
+blender/*.glb
