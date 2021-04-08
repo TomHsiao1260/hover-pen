@@ -1,7 +1,7 @@
 import Application from './javascript/Application.js';
-import './style/main.css';
-import './style/loading.css';
-import './style/label.css';
+import './style/main.scss';
+import './style/loading.scss';
+import './style/label.scss';
 
 window.application = new Application({
     $canvas: document.querySelector('.webgl'),

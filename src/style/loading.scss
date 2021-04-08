@@ -1,0 +1,70 @@
+.trademark
+{
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 4.5s ease-out; 
+    svg
+    {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        .path
+        {
+            // https://css-tricks.com/svg-line-animation-works/
+            stroke-dasharray: 250;
+            stroke-dashoffset: 250;
+            animation: dash 2s ease-out infinite;
+        }
+    }
+    .title
+    {
+        position: absolute;
+        color: white;
+        font-size: 30px;
+        letter-spacing: 10px;
+        text-align: center;
+        top: 100%;
+        left: 50%;
+        transform: translate(-45%, -50%);
+        font-family: Helvetica, Arial, sans-serif;
+        animation: blink 2s ease-in-out infinite;
+        animation-direction: alternate;
+    }
+    &.fadeout
+    {
+        opacity: 0;
+    }
+}
+@media screen and (max-width:600px) {
+    .trademark {
+        transform: translate(-50%, -50%) scale(0.7);
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dashoffset: 250;
+    }
+    40% {
+        stroke-dashoffset: 0;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}

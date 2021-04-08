@@ -1,0 +1,30 @@
+.points
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    .point
+    {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100px;
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px;
+        background: #00000077;
+        border: 1px solid #ffffff77;
+        color: #ffffff;
+        line-height: 1.3em;
+        font-family: Helvetica, Arial, sans-serif;
+        font-weight: 100;
+        font-size: 14px;
+        opacity: 0;
+        transform: scale(0, 0);
+        transition: opacity 0.3s ease-in-out;
+        &.visible
+        {
+            opacity: 1;
+        }
+    }
+}
