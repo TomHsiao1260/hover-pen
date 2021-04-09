@@ -20,7 +20,7 @@ export default class Role {
         this.setTraverse();
         this.setRaycasterBox();
         this.setPenGroup();
-        // this.setColor();
+        this.setColor();
         this.setAnimation();
     }
 
@@ -113,9 +113,9 @@ export default class Role {
 
     setColor() {
         this.rayColorMeshes = [];
-        this.rayColorMeshes.push(this.base1);
-        this.rayColorMeshes.push(this.base2);
-        this.rayColorMeshes.push(this.ring);
+        this.rayColorMeshes.push(this.base1Box);
+        this.rayColorMeshes.push(this.base2Box);
+        this.rayColorMeshes.push(this.ringBox);
 
         this.colors = [];
         this.colors.push({ color: '#292934', metalness: 0.90, lightIntensity: 2.0 });
@@ -123,7 +123,7 @@ export default class Role {
 
         this.colorIndex = 0;
 
-        this.time.on('click', () => {
+        this.time.on('shortClick', () => {
             this.intersects = this.controls.raycaster.intersectObjects(this.rayColorMeshes);
 
             if (this.intersects.length) {

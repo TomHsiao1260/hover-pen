@@ -7,7 +7,6 @@ export default class Labels {
         this.sizes = _option.sizes;
         this.camera = _option.camera;
         this.debug = _option.debug;
-        this.controls = _option.controls;
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
@@ -35,27 +34,27 @@ export default class Labels {
         this.labels.push(this.label1);
         this.labels.push(this.label2);
 
-        this.label1.container = document.createElement('DIV');
-        this.label2.container = document.createElement('DIV');
-        this.label1.container.className = 'container';
-        this.label2.container.className = 'container';
+        this.label1.$container = document.createElement('DIV');
+        this.label2.$container = document.createElement('DIV');
+        this.label1.$container.className = 'container';
+        this.label2.$container.className = 'container';
 
-        this.label1.point = document.createElement('DIV');
-        this.label2.point = document.createElement('DIV');
-        this.label1.point.className = 'point point-1 left';
-        this.label2.point.className = 'point point-2 right';
-        this.label1.point.innerText = '. 23.5 degree tilt';
-        this.label2.point.innerText = 'only 16g pen weight .';
+        this.label1.$point = document.createElement('DIV');
+        this.label2.$point = document.createElement('DIV');
+        this.label1.$point.className = 'point point-1 left';
+        this.label2.$point.className = 'point point-2 right';
+        this.label1.$point.innerText = '23.5 degree tilt';
+        this.label2.$point.innerText = 'Only 16g pen weight';
 
         this.labels.config = { k: 0.0005, amp: 10 };
         this.label1.config = { shiftX: 28, shiftY: 17, phase: 0.0 * Math.PI };
         this.label2.config = { shiftX: -200, shiftY: 17, phase: 0.5 * Math.PI };
 
-        this.points = document.querySelector('.points');
-        this.points.appendChild(this.label1.container);
-        this.points.appendChild(this.label2.container);
-        this.label1.container.appendChild(this.label1.point);
-        this.label2.container.appendChild(this.label2.point);
+        this.$points = document.querySelector('.points');
+        this.$points.appendChild(this.label1.$container);
+        this.$points.appendChild(this.label2.$container);
+        this.label1.$container.appendChild(this.label1.$point);
+        this.label2.$container.appendChild(this.label2.$point);
 
         if (this.debug) {
             this.role.label1.add(new THREE.AxesHelper(0.5));
@@ -105,19 +104,19 @@ export default class Labels {
                 x += label.config.shiftX;
                 y -= label.config.shiftY + shift;
 
-                label.container.style.transform = `translateX(${x}px) translateY(${y}px)`;
+                label.$container.style.transform = `translateX(${x}px) translateY(${y}px)`;
             });
         });
     }
 
     async setDisplay() {
-        this.label1.point.classList.add('visible');
-        this.label1.point.classList.add('typing');
+        this.label1.$point.classList.add('visible');
+        this.label1.$point.classList.add('typing');
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
-        this.label2.point.classList.add('visible');
-        this.label2.point.classList.add('typing');
+        this.label2.$point.classList.add('visible');
+        this.label2.$point.classList.add('typing');
     }
 
     async setHidden() {
@@ -134,15 +133,15 @@ export default class Labels {
                 const intersects = raycaster.intersectObjects(obstacles);
 
                 if (intersects.length === 0) {
-                    label.point.classList.add('visible');
+                    label.$point.classList.add('visible');
                 } else {
                     const obstacleDistance = intersects[0].distance;
                     const pointDistance = label.position.distanceTo(this.camera.instance.position);
 
                     if (obstacleDistance < pointDistance) {
-                        label.point.classList.remove('visible');
+                        label.$point.classList.remove('visible');
                     } else {
-                        label.point.classList.add('visible');
+                        label.$point.classList.add('visible');
                     }
                 }
             });
