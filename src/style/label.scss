@@ -1,4 +1,4 @@
-$max-width: 150px;
+$max-width: 200px;
 
 .points
 {
@@ -23,21 +23,22 @@ $max-width: 150px;
             color: #ccffff;
             letter-spacing: 0.05em;
             font-size: 15px;
-            opacity: 0;
             font-family: Helvetica, Arial, sans-serif;
             border-right: 2px solid transparent;
             border-left: 2px solid transparent;
             text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0);
             white-space: nowrap;
             overflow: hidden;
-            transition: opacity 0.8s ease-in-out;
+            transform: scale(0, 0);
+            transition: transform 0.5s ease-in-out;
             &.left
             {
                 left: 0;
                 text-align: left;
                 &.typing {
                     animation: typing 2s steps(40),
-                    cursorLeft 0.5s steps(40) 10;
+                    cursorLeft 0.5s steps(40) 10,
+                    blink 5s ease-in-out infinite alternate;
                 }
             }
             &.right
@@ -46,12 +47,13 @@ $max-width: 150px;
                 text-align: right;
                 &.typing {
                     animation: typing 2s steps(40),
-                    cursorRight 0.5s steps(40) 10;
+                    cursorRight 0.5s steps(40) 10,
+                    blink 5s ease-in-out infinite alternate;
                 }
             }
             &.visible
             {
-                opacity: 0.8;
+                transform: scale(1, 1);
             }
         }
     }
@@ -63,6 +65,14 @@ $max-width: 150px;
     }
     100% {
         width: $max-width;
+    }
+}
+@keyframes blink {
+    0% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0.2;
     }
 }
 

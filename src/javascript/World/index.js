@@ -71,6 +71,7 @@ export default class World {
             debug: this.debug,
             sizes: this.sizes,
             camera: this.camera,
+            controls: this.controls,
         });
 
         this.container.add(this.labels.container);

@@ -7,6 +7,7 @@ export default class Labels {
         this.sizes = _option.sizes;
         this.camera = _option.camera;
         this.debug = _option.debug;
+        this.controls = _option.controls;
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
@@ -16,11 +17,18 @@ export default class Labels {
             // this.debugFolder.open();
         }
 
-        this.setDOM();
-        this.setLabels();
+        this.start();
     }
 
-    setDOM() {
+    async start() {
+        await this.setDOM();
+        await this.setPosition();
+        await this.setAnimation();
+        await this.setDisplay();
+        await this.setHidden();
+    }
+
+    async setDOM() {
         this.labels = [];
         this.label1 = {};
         this.label2 = {};
@@ -36,12 +44,12 @@ export default class Labels {
         this.label2.point = document.createElement('DIV');
         this.label1.point.className = 'point point-1 left';
         this.label2.point.className = 'point point-2 right';
-        this.label1.point.innerText = '23.5 degree tilt';
-        this.label2.point.innerText = 'only 16g pen weight';
-        // eslint-disable-next-line object-curly-newline
-        this.label1.config = { shiftX: 40, shiftY: 0, k: 0.001, phase: 0.0 * Math.PI, amp: 5 };
-        // eslint-disable-next-line object-curly-newline
-        this.label2.config = { shiftX: -167, shiftY: 35, k: 0.001, phase: 0.5 * Math.PI, amp: 5 };
+        this.label1.point.innerText = '. 23.5 degree tilt';
+        this.label2.point.innerText = 'only 16g pen weight .';
+
+        this.labels.config = { k: 0.0005, amp: 10 };
+        this.label1.config = { shiftX: 28, shiftY: 17, phase: 0.0 * Math.PI };
+        this.label2.config = { shiftX: -200, shiftY: 17, phase: 0.5 * Math.PI };
 
         this.points = document.querySelector('.points');
         this.points.appendChild(this.label1.container);
@@ -53,14 +61,18 @@ export default class Labels {
             this.role.label1.add(new THREE.AxesHelper(0.5));
             this.role.label2.add(new THREE.AxesHelper(0.5));
 
+            this.debugFolder.add(this.labels.config, 'k').min(0).max(0.01).step(0.0001).name('labels k');
+            this.debugFolder.add(this.labels.config, 'amp').min(0).max(50).step(1).name('labels ampitude');
             this.debugFolder.add(this.label1.config, 'shiftX').min(-300).max(300).step(1).name('label1 shiftX');
             this.debugFolder.add(this.label1.config, 'shiftY').min(-300).max(300).step(1).name('label1 shiftY');
+            this.debugFolder.add(this.label1.config, 'phase').min(-4).max(4).step(0.1).name('label1 phase');
             this.debugFolder.add(this.label2.config, 'shiftX').min(-300).max(300).step(1).name('label2 shiftX');
             this.debugFolder.add(this.label2.config, 'shiftY').min(-300).max(300).step(1).name('label2 shiftY');
+            this.debugFolder.add(this.label2.config, 'phase').min(-4).max(4).step(0.1).name('label2 phase');
         }
     }
 
-    async setLabels() {
+    async setPosition() {
         await new Promise((resolve) => setTimeout(resolve, 3000));
 
         this.label1.mesh = this.role.label1;
@@ -76,30 +88,64 @@ export default class Labels {
                 label.mesh = label.mesh.parent;
             }
         });
+    }
 
+    async setAnimation() {
         this.time.on('tick', () => {
             this.labels.forEach((value) => {
                 const label = value;
-                const screenPosition = label.position.clone();
-                screenPosition.project(this.camera.instance);
+                label.screenPosition = label.position.clone();
+                label.screenPosition.project(this.camera.instance);
 
-                let x = screenPosition.x * this.sizes.width * 0.5;
-                let y = -screenPosition.y * this.sizes.height * 0.5;
-
+                const theta = this.labels.config.k * this.time.elapsed + label.config.phase;
+                const shift = this.labels.config.amp * Math.sin(theta);
+                let { x, y } = label.screenPosition;
+                x *= this.sizes.width * 0.5;
+                y *= -this.sizes.height * 0.5;
                 x += label.config.shiftX;
-                y -= label.config.shiftY;
-
-                const theta = label.config.k * this.time.elapsed + label.config.phase;
-                y -= label.config.amp * Math.sin(theta);
+                y -= label.config.shiftY + shift;
 
                 label.container.style.transform = `translateX(${x}px) translateY(${y}px)`;
             });
         });
+    }
 
+    async setDisplay() {
         this.label1.point.classList.add('visible');
         this.label1.point.classList.add('typing');
+
         await new Promise((resolve) => setTimeout(resolve, 1500));
+
         this.label2.point.classList.add('visible');
         this.label2.point.classList.add('typing');
+    }
+
+    async setHidden() {
+        const raycaster = new THREE.Raycaster();
+        const obstacles = [];
+        obstacles.push(this.role.penBox);
+        obstacles.push(this.role.ringBox);
+        obstacles.push(this.role.base1Box);
+        obstacles.push(this.role.base2Box);
+
+        this.time.on('tick', () => {
+            this.labels.forEach((label) => {
+                raycaster.setFromCamera(label.screenPosition, this.camera.instance);
+                const intersects = raycaster.intersectObjects(obstacles);
+
+                if (intersects.length === 0) {
+                    label.point.classList.add('visible');
+                } else {
+                    const obstacleDistance = intersects[0].distance;
+                    const pointDistance = label.position.distanceTo(this.camera.instance.position);
+
+                    if (obstacleDistance < pointDistance) {
+                        label.point.classList.remove('visible');
+                    } else {
+                        label.point.classList.add('visible');
+                    }
+                }
+            });
+        });
     }
 }

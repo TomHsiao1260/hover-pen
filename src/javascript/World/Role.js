@@ -18,6 +18,7 @@ export default class Role {
 
         this.setRole();
         this.setTraverse();
+        this.setRaycasterBox();
         this.setPenGroup();
         // this.setColor();
         this.setAnimation();
@@ -43,16 +44,35 @@ export default class Role {
         this.instance.traverse((child) => {
             switch (child.name) {
                 case 'pen': this.pen = child; break;
-                case 'penPeak': this.penPeak = child; break;
                 case 'penBody': this.penBody = child; break;
+                case 'penHead': this.penHead = child; break;
+                case 'penPeak': this.penPeak = child; break;
+                case 'penRing': this.penRing = child; break;
+
+                case 'ring': this.ring = child; break;
                 case 'base1': this.base1 = child; break;
                 case 'base2': this.base2 = child; break;
-                case 'ring': this.ring = child; break;
+
                 case 'label1': this.label1 = child; break;
                 case 'label2': this.label2 = child; break;
+
+                case 'penBox': this.penBox = child; break;
+                case 'ringBox': this.ringBox = child; break;
+                case 'base1Box': this.base1Box = child; break;
+                case 'base2Box': this.base2Box = child; break;
+
                 default: break;
             }
             if (this.debug) this.debugFolder.add(child, 'visible').name(child.name);
+        });
+    }
+
+    setRaycasterBox() {
+        const boxes = [this.penBox, this.ringBox, this.base1Box, this.base2Box];
+        boxes.forEach((value) => {
+            const mesh = value;
+            mesh.material.transparent = true;
+            mesh.material.opacity = 0;
         });
     }
 
