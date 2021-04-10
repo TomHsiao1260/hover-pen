@@ -4,7 +4,8 @@ uniform float uTime;        // normalized progress time
 uniform float uSize;        // particles size
 uniform float uWidth;       // size of geometry
 
-attribute vec3 aRandomness; // random value for particles
+attribute vec3 aRandomness; // 3D random value for particles
+attribute float aBlink;     // 1D random value for particles
 
 varying vec3 vColor;        // particles color
 
@@ -63,6 +64,8 @@ void main()
     gl_Position = projectedPosition;
 
     // handle particles size
+    // float theta = 2.0 * PI * aBlink + 2.0 * uTime;
+    // gl_PointSize = uSize * (1.0 + sin(theta));
     gl_PointSize = uSize * 2.0;
     gl_PointSize *= (1.0 / - viewPosition.z);
 

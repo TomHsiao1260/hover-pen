@@ -29,9 +29,11 @@ export default class Particles {
         this.vertexPosition = new Float32Array(this.parameters.counts * 3);
         this.vertexRandom = new Float32Array(this.parameters.counts * 3);
         this.vertexColor = new Float32Array(this.parameters.counts * 3);
+        this.vertexBlink = new Float32Array(this.parameters.counts * 1);
 
         this.vertexPosition.forEach((value, i) => { this.vertexPosition[i] = 0; });
         this.vertexRandom.forEach((value, i) => { this.vertexRandom[i] = Math.random(); });
+        this.vertexBlink.forEach((value, i) => { this.vertexBlink[i] = Math.random(); });
         this.vertexColor.forEach((value, i) => {
             switch (i % 3) {
                 case 0: this.vertexColor[i] = Math.random() * 0.5; break;
@@ -45,6 +47,7 @@ export default class Particles {
         this.geometry.setAttribute('position', new THREE.BufferAttribute(this.vertexPosition, 3));
         this.geometry.setAttribute('aRandomness', new THREE.BufferAttribute(this.vertexRandom, 3));
         this.geometry.setAttribute('color', new THREE.BufferAttribute(this.vertexColor, 3));
+        this.geometry.setAttribute('aBlink', new THREE.BufferAttribute(this.vertexBlink, 1));
 
         this.material = this.materials.items.shader.particles;
         this.instance = new THREE.Points(this.geometry, this.material);

@@ -59,6 +59,12 @@ $max-width: 200px;
     }
 }
 
+@media screen and (max-width:768px) {
+    .points .container .point {
+        font-size: 12px;
+    }
+}
+
 @keyframes typing {
     0% {
         width: 0;
