@@ -21,21 +21,12 @@ export default class World {
         this.materials = new Materials({ resources: this.resources });
 
         this.setLoadingPage();
-        this.setControls();
         this.setStartingScreen();
     }
 
     setLoadingPage() {
         this.loadingPage = new LoadingPage({ materials: this.materials });
         this.container.add(this.loadingPage.container);
-    }
-
-    setControls() {
-        this.controls = new Controls({
-            time: this.time,
-            sizes: this.sizes,
-            camera: this.camera,
-        });
     }
 
     setStartingScreen() {
@@ -47,9 +38,28 @@ export default class World {
         this.loadingPage.setFinish();
         this.materials.setMaterials();
 
+        this.setControls();
         this.setRole();
         this.setLabels();
         this.setParticles();
+        this.setTransition();
+    }
+
+    async setTransition() {
+        await this.camera.setTransition();
+        await this.labels.start();
+        await this.role.setColor();
+        await this.particles.setControls();
+
+        this.camera.controls.enabled = true;
+    }
+
+    setControls() {
+        this.controls = new Controls({
+            time: this.time,
+            sizes: this.sizes,
+            camera: this.camera,
+        });
     }
 
     setRole() {

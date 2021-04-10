@@ -20,14 +20,13 @@ export default class Camera {
 
         this.setRWD();
         this.setInstance();
-        this.setTransition();
         this.setControls();
     }
 
     setRWD() {
         switch (this.sizes.width > 768) {
             case true: this.scale = 1.0; break;
-            case false: this.scale = 1.3; break;
+            case false: this.scale = 1.5; break;
             default: break;
         }
     }
@@ -53,29 +52,29 @@ export default class Camera {
         });
     }
 
-    setTransition() {
+    setControls() {
+        this.controls = new OrbitControls(this.instance, this.canvas);
+        this.controls.target = new THREE.Vector3(0, 0, 0);
+        this.controls.enableDamping = true;
+        this.controls.enabled = false;
+
+        this.time.on('tick', () => this.controls.update());
+    }
+
+    async setTransition() {
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         this.timeline = gsap.timeline();
 
         this.path = [];
         this.path.push({ duration: 10, point: new THREE.Vector3(6.6, 12, 5.0) });
         this.path.push({ duration: 5, point: new THREE.Vector3(1.1, 3.3, 11.0) });
 
-        this.resources.on('ready', async () => {
-            await new Promise((resolve) => setTimeout(resolve, 5000));
-
-            this.path.forEach(({ duration, point }) => {
-                const { x, y, z } = point.multiplyScalar(this.scale);
-                // eslint-disable-next-line object-curly-newline
-                this.timeline.to(this.instance.position, { duration, x, y, z });
-            });
+        this.path.forEach(({ duration, point }) => {
+            const { x, y, z } = point.multiplyScalar(this.scale);
+            // eslint-disable-next-line object-curly-newline
+            this.timeline.to(this.instance.position, { duration, x, y, z });
         });
-    }
-
-    setControls() {
-        this.controls = new OrbitControls(this.instance, this.canvas);
-        this.controls.target = new THREE.Vector3(0, 0, 0);
-        this.controls.enableDamping = true;
-
-        this.time.on('tick', () => this.controls.update());
+        // gsap.timeline is a promise which will get resolved when the animation completes.
+        return this.timeline;
     }
 }

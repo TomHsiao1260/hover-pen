@@ -16,18 +16,21 @@ export default class Labels {
             // this.debugFolder.open();
         }
 
-        this.start();
+        this.setup();
     }
 
-    async start() {
+    async setup() {
         await this.setDOM();
         await this.setPosition();
         await this.setAnimation();
+    }
+
+    async start() {
         await this.setDisplay();
         await this.setHidden();
     }
 
-    async setDOM() {
+    setDOM() {
         this.labels = [];
         this.label1 = {};
         this.label2 = {};
@@ -76,7 +79,7 @@ export default class Labels {
     }
 
     async setPosition() {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         this.label1.mesh = this.role.label1;
         this.label2.mesh = this.role.label2;
@@ -93,7 +96,7 @@ export default class Labels {
         });
     }
 
-    async setAnimation() {
+    setAnimation() {
         this.time.on('tick', () => {
             this.labels.forEach((value) => {
                 const label = value;
@@ -116,14 +119,14 @@ export default class Labels {
     async setDisplay() {
         this.label1.$point.classList.add('visible');
         this.label1.$point.classList.add('typing');
-
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
         this.label2.$point.classList.add('visible');
         this.label2.$point.classList.add('typing');
+        await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
-    async setHidden() {
+    setHidden() {
         const raycaster = new THREE.Raycaster();
         const obstacles = [];
         obstacles.push(this.role.penBox);

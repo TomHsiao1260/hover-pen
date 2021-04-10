@@ -20,7 +20,6 @@ export default class Role {
         this.setTraverse();
         this.setRaycasterBox();
         this.setPenGroup();
-        this.setColor();
         this.setAnimation();
     }
 
@@ -111,6 +110,13 @@ export default class Role {
         }
     }
 
+    setAnimation() {
+        this.time.on('tick', () => {
+            const theta = this.time.delta * this.parameters.speed;
+            this.pen.rotateOnAxis(new THREE.Vector3(0, 1, 0), theta);
+        });
+    }
+
     setColor() {
         this.rayColorMeshes = [];
         this.rayColorMeshes.push(this.base1Box);
@@ -135,13 +141,6 @@ export default class Role {
                 this.colorIndex += 1;
                 this.colorIndex %= this.colors.length;
             }
-        });
-    }
-
-    setAnimation() {
-        this.time.on('tick', () => {
-            const theta = this.time.delta * this.parameters.speed;
-            this.pen.rotateOnAxis(new THREE.Vector3(0, 1, 0), theta);
         });
     }
 }

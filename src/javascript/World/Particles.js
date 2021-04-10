@@ -17,11 +17,11 @@ export default class Particles {
             // this.debugFolder.open();
         }
 
+        this.setGeometry();
         this.setParticles();
-        this.setAnimation();
     }
 
-    setParticles() {
+    setGeometry() {
         this.parameters = {};
         this.parameters.counts = 200;
         this.parameters.speed = 0.01;
@@ -48,7 +48,9 @@ export default class Particles {
         this.geometry.setAttribute('aRandomness', new THREE.BufferAttribute(this.vertexRandom, 3));
         this.geometry.setAttribute('color', new THREE.BufferAttribute(this.vertexColor, 3));
         this.geometry.setAttribute('aBlink', new THREE.BufferAttribute(this.vertexBlink, 1));
+    }
 
+    setParticles() {
         this.material = this.materials.items.shader.particles;
         this.instance = new THREE.Points(this.geometry, this.material);
         this.container.add(this.instance);
@@ -58,14 +60,14 @@ export default class Particles {
             this.container.add(this.axes);
             this.debugFolder.add(this.axes, 'visible').name('axes');
         }
-    }
 
-    async setAnimation() {
         this.time.on('tick', () => {
             this.material.uniforms.uTime.value = this.time.elapsed / 1000;
         });
+    }
 
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+    async setControls() {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         this.meshRef = this.role.penBody;
         this.penBodyPosition = this.meshRef.position.clone();
 
