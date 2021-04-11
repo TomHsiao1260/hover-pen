@@ -89,6 +89,7 @@ export default class World {
     setParticles() {
         this.particles = new Particles({
             time: this.time,
+            sizes: this.sizes,
             role: this.role,
             controls: this.controls,
             camera: this.camera,

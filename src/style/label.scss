@@ -98,6 +98,8 @@ $max-width-mobile: 130px;
 @media screen and (max-width:768px) {
     .points .container .point {
         font-size: 12px;
+        border-right: 1px solid transparent;
+        border-left: 1px solid transparent;
     }
     @keyframes typing {
         0% {

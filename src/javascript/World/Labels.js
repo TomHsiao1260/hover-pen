@@ -49,7 +49,7 @@ export default class Labels {
         this.label1.$point.innerText = '23.5 degree tilt';
         this.label2.$point.innerText = 'only 16g pen weight';
 
-        this.labels.config = { k: 0.0005, amp: 10 };
+        this.labels.config = { k: 0.0005, amp: 15 };
         this.label1.config = { shiftX: 28, shiftY: 17, phase: 0.0 * Math.PI };
         this.label2.config = { shiftX: -200, shiftY: 17, phase: 0.5 * Math.PI };
         if (this.sizes.width < 768) {

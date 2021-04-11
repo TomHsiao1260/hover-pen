@@ -32,12 +32,7 @@ export default class Application {
 
     setDebug() {
         if (this.config.debug) {
-            let width = 420;
-            switch (this.sizes.width > 768) {
-                case false: width = 210; break;
-                case true: break;
-                default: break;
-            }
+            const width = this.sizes.width > 768 ? 420 : 210;
             this.debug = new dat.GUI({ width });
         }
     }

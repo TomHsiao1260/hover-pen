@@ -10,6 +10,7 @@ export default function particlesMaterial(_option) {
         uTime: { value: 0 },
         uTexture: { value: spotTexture },
         uWidth: { value: 20 },
+        uColorShift: { value: new THREE.Vector3() },
         uSize: { value: 100 * window.application.renderer.getPixelRatio() },
     };
 

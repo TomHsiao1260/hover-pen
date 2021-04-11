@@ -123,15 +123,13 @@ export default class Role {
         this.rayColorMeshes.push(this.base2Box);
         this.rayColorMeshes.push(this.ringBox);
 
-        this.colors = [];
-        this.colors.push({ color: '#292934', metalness: 0.90, lightIntensity: 2.0 });
-        this.colors.push({ color: '#000000', metalness: 0.00, lightIntensity: 0.0 });
-
         this.colorIndex = 0;
+        this.colors = [];
+        this.colors.push({ color: '#131318', metalness: 0.90, lightIntensity: 5.0 });
+        this.colors.push({ color: '#000000', metalness: 0.00, lightIntensity: 0.0 });
 
         this.time.on('shortClick', () => {
             this.intersects = this.controls.raycaster.intersectObjects(this.rayColorMeshes);
-
             if (this.intersects.length) {
                 const { color, metalness, lightIntensity } = this.colors[this.colorIndex];
                 this.penBody.material.color.set(color);
@@ -140,6 +138,8 @@ export default class Role {
 
                 this.colorIndex += 1;
                 this.colorIndex %= this.colors.length;
+
+                this.time.trigger('colorChange');
             }
         });
     }

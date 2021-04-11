@@ -35,6 +35,7 @@ export default class Camera {
         const { width, height } = this.sizes.viewport;
         this.instance = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
         this.instance.position.set(-2.0, -1.2, -2.2);
+        // this.instance.position.set(1.1, 3.3, 11.0);
         this.instance.position.multiplyScalar(this.scale);
         this.container.add(this.instance);
 
@@ -70,7 +71,6 @@ export default class Camera {
 
         this.path.forEach(({ duration, point }) => {
             const { x, y, z } = point.multiplyScalar(this.scale);
-            // eslint-disable-next-line object-curly-newline
             this.timeline.to(this.instance.position, { duration, x, y, z });
         });
         // gsap.timeline is a promise which will get resolved when the animation completes.
