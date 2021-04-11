@@ -53,6 +53,7 @@ export default class Labels {
         this.label1.config = { shiftX: 28, shiftY: 17, phase: 0.0 * Math.PI };
         this.label2.config = { shiftX: -200, shiftY: 17, phase: 0.5 * Math.PI };
         if (this.sizes.width < 768) {
+            this.labels.config = { k: 0.0005, amp: 10 };
             this.label1.config = { shiftX: 0, shiftY: -20, phase: 0.0 * Math.PI };
             this.label2.config = { shiftX: -172, shiftY: 8, phase: 0.5 * Math.PI };
         }

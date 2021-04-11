@@ -46,7 +46,7 @@ export default class World {
     }
 
     async setTransition() {
-        await this.camera.setTransition();
+        // await this.camera.setTransition();
         await this.labels.start();
         await this.role.setColor();
         await this.particles.setControls();

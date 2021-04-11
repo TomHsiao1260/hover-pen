@@ -92,7 +92,7 @@ export default class Particles {
                 const target = this.material.uniforms.uWidth;
                 const { value } = target;
                 this.timeline.to(target, { duration: 0.3, value: 1.3 * value, ease: 'Power1.easeOut' });
-                this.timeline.to(target, { duration: 1.5, value: 1.0 * value, ease: 'Elastic.easeOut.config(1, 0.75)' });
+                this.timeline.to(target, { duration: 1.5, value: 1.0 * value, ease: 'Power1.easeOut' });
             }
         });
     }
@@ -117,7 +117,9 @@ export default class Particles {
 
             const scale = this.instance.position.y > 0 ? modify : -1;
             const far = this.instance.position.length() / this.penBodyPosition.length();
-            this.material.uniforms.uWidth.value = 20 - 19.99 * far / scale;
+            const targetWidth = 20 - 19.999 * far / scale;
+            const diff = targetWidth - this.material.uniforms.uWidth.value;
+            this.material.uniforms.uWidth.value += 0.01 * diff;
         });
     }
 }
