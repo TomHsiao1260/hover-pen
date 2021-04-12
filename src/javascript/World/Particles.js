@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import gsap from 'gsap';
 
 export default class Particles {
     constructor(_option) {
@@ -9,6 +8,7 @@ export default class Particles {
         this.camera = _option.camera;
         this.role = _option.role;
         this.debug = _option.debug;
+        this.timeline = _option.timeline;
         this.materials = _option.materials;
 
         this.container = new THREE.Object3D();
@@ -74,21 +74,60 @@ export default class Particles {
         });
     }
 
+    setTransition() {
+        const target = this.material.uniforms.uWidth;
+        const { value } = target;
+
+        this.path = [];
+        this.path.push({ delay: 12,
+                         duration: 0.5,
+                         value: 1.80 * value,
+                         ease: 'Power1.easeOut',
+                         label: 'particleStart',
+                         addTo: 'cameraStart',
+        });
+        this.path.push({ delay: 0,
+                         duration: 4.5,
+                         value: 0.01 * value,
+                         ease: 'Power1.easeOut',
+                         label: 'particle1',
+                         addTo: 'cameraLast',
+        });
+        this.path.push({ delay: 0,
+                         duration: 0.5,
+                         value: 1.50 * value,
+                         ease: 'Power1.easeOut',
+                         label: 'particle2',
+                         addTo: '>',
+        });
+        this.path.push({ delay: 2,
+                         duration: 0.5,
+                         value: 1.00 * value,
+                         ease: 'Power1.easeOut',
+                         label: 'particleLast',
+                         addTo: '>',
+        });
+
+        this.path.forEach(({ delay, duration, value, ease, label, addTo }) => {
+            this.timeline.addLabel(label, addTo);
+            this.timeline.to(target, { delay, duration, value, ease }, label);
+        });
+    }
+
     setColors() {
-        this.timeline = gsap.timeline();
         this.colorIndex = 0;
         this.colors = [];
         this.colors.push({ shift: new THREE.Vector3(0.0, 0.3, 0.0) });
         this.colors.push({ shift: new THREE.Vector3(0.0, 0.0, 0.0) });
 
         this.time.on('colorChange', () => {
-            const { shift } = this.colors[this.colorIndex];
-            const { x, y, z } = shift;
-            this.material.uniforms.uColorShift.value.set(x, y, z);
-            this.colorIndex += 1;
-            this.colorIndex %= this.colors.length;
-
             if (!this.timeline.isActive()) {
+                const { shift } = this.colors[this.colorIndex];
+                const { x, y, z } = shift;
+                this.material.uniforms.uColorShift.value.set(x, y, z);
+                this.colorIndex += 1;
+                this.colorIndex %= this.colors.length;
+
                 const target = this.material.uniforms.uWidth;
                 const { value } = target;
                 this.timeline.to(target, { duration: 0.3, value: 1.3 * value, ease: 'Power1.easeOut' });

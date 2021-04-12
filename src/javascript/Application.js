@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import * as dat from 'dat.gui';
+import gsap from 'gsap';
 
 import Time from './Utils/Time';
 import Sizes from './Utils/Sizes';
@@ -12,6 +13,7 @@ import World from './World';
 export default class Application {
     constructor(_option) {
         this.$canvas = _option.$canvas;
+        this.timeline = gsap.timeline();
 
         this.time = new Time();
         this.sizes = new Sizes();
@@ -68,6 +70,7 @@ export default class Application {
             renderer: this.renderer,
             canvas: this.$canvas,
             debug: this.debug,
+            timeline: this.timeline,
         });
 
         this.scene.add(this.camera.container);
@@ -77,6 +80,7 @@ export default class Application {
     setLight() {
         this.light = new Light({
             debug: this.debug,
+            timeline: this.timeline,
         });
         this.scene.add(this.light.container);
     }
@@ -89,6 +93,7 @@ export default class Application {
             camera: this.camera,
             debug: this.debug,
             light: this.light,
+            timeline: this.timeline,
         });
 
         this.scene.add(this.world.container);

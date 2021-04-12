@@ -15,6 +15,7 @@ export default class World {
         this.camera = _option.camera;
         this.debug = _option.debug;
         this.light = _option.light;
+        this.timeline = _option.timeline;
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
@@ -46,11 +47,14 @@ export default class World {
     }
 
     async setTransition() {
-        // await this.camera.setTransition();
-        await this.labels.start();
-        await this.role.setColor();
-        await this.particles.setControls();
+        this.camera.setTransition();
+        this.particles.setTransition();
 
+        await this.timeline;
+
+        this.labels.start();
+        this.role.setColor();
+        this.particles.setControls();
         this.camera.controls.enabled = true;
     }
 
@@ -69,6 +73,7 @@ export default class World {
             debug: this.debug,
             controls: this.controls,
             light: this.light,
+            timeline: this.timeline,
         });
 
         this.container.add(this.role.container);
@@ -95,6 +100,7 @@ export default class World {
             camera: this.camera,
             debug: this.debug,
             materials: this.materials,
+            timeline: this.timeline,
         });
 
         this.container.add(this.particles.container);

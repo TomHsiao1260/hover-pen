@@ -7,6 +7,7 @@ export default class Role {
         this.debug = _option.debug;
         this.controls = _option.controls;
         this.light = _option.light;
+        this.timeline = _option.timeline;
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
@@ -130,7 +131,7 @@ export default class Role {
 
         this.time.on('shortClick', () => {
             this.intersects = this.controls.raycaster.intersectObjects(this.rayColorMeshes);
-            if (this.intersects.length) {
+            if (this.intersects.length && !this.timeline.isActive()) {
                 const { color, metalness, lightIntensity } = this.colors[this.colorIndex];
                 this.penBody.material.color.set(color);
                 this.penBody.material.metalness = metalness;

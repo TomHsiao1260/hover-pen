@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import gsap from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 export default class Camera {
@@ -10,6 +9,8 @@ export default class Camera {
         this.renderer = _option.renderer;
         this.canvas = _option.canvas;
         this.debug = _option.debug;
+        this.timeline = _option.timeline;
+
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
 
@@ -34,8 +35,8 @@ export default class Camera {
     setInstance() {
         const { width, height } = this.sizes.viewport;
         this.instance = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-        // this.instance.position.set(-2.0, -1.2, -2.2);
-        this.instance.position.set(1.1, 3.3, 11.0);
+        this.instance.position.set(-2.0, -1.2, -2.2);
+        // this.instance.position.set(1.1, 3.3, 11.0);
         this.instance.position.multiplyScalar(this.scale);
         this.container.add(this.instance);
 
@@ -61,19 +62,22 @@ export default class Camera {
         this.time.on('tick', () => this.controls.update());
     }
 
-    async setTransition() {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        this.timeline = gsap.timeline();
-
+    setTransition() {
         this.path = [];
-        this.path.push({ duration: 10, point: new THREE.Vector3(6.6, 12, 5.0) });
-        this.path.push({ duration: 5, point: new THREE.Vector3(1.1, 3.3, 11.0) });
-
-        this.path.forEach(({ duration, point }) => {
-            const { x, y, z } = point.multiplyScalar(this.scale);
-            this.timeline.to(this.instance.position, { duration, x, y, z });
+        this.path.push({ delay: 5,
+                         duration: 10.0,
+                         point: new THREE.Vector3(6.6, 12, 5.0),
+                         label: 'cameraStart',
         });
-        // gsap.timeline is a promise which will get resolved when the animation completes.
-        return this.timeline;
+        this.path.push({ delay: 0,
+                         duration: 5.0,
+                         point: new THREE.Vector3(1.1, 3.3, 11.0),
+                         label: 'cameraLast',
+        });
+
+        this.path.forEach(({ delay, duration, point, label }) => {
+            const { x, y, z } = point.multiplyScalar(this.scale);
+            this.timeline.to(this.instance.position, { duration, delay, x, y, z }, label);
+        });
     }
 }
