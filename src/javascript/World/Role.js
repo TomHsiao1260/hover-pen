@@ -29,9 +29,11 @@ export default class Role {
         this.parameters.rotate = 1.2;
         this.parameters.tilt = 0;
         this.parameters.speed = 0.0005;
+        this.parameters.selfSpeed = 0;
         this.parameters.metalness = 0;
         this.parameters.lightIntensity = 0;
         this.parameters.color = '#000000';
+        this.parameters.spinning = false;
 
         this.instance = this.resources.items.pen.scene;
         this.instance.scale.set(3, 3, 3);
@@ -102,6 +104,7 @@ export default class Role {
             this.debugFolder.add(this.penAxes, 'visible').name('penAxes');
             this.debugFolder.add(this.instancePenAxes, 'visible').name('instancePenAxes');
             this.debugFolder.add(this.parameters, 'speed').min(0).max(0.01).step(0.00001).name('speed');
+            this.debugFolder.add(this.parameters, 'selfSpeed').min(0).max(0.01).step(0.00001).name('self speed');
 
             this.debugFolder.add(this.parameters, 'rotate').min(0).max(2).step(0.01).name('rotate')
                             .onChange(() => { this.instance.rotation.y = Math.PI * this.parameters.rotate; });
@@ -120,11 +123,80 @@ export default class Role {
         }
     }
 
-    // pen default animation
+    // pen animation
     setAnimation() {
+        // set animation parameters into tick function
         this.time.on('tick', () => {
-            const theta = this.time.delta * this.parameters.speed;
-            this.pen.rotateOnAxis(new THREE.Vector3(0, 1, 0), theta);
+            const thetaA = this.time.delta * this.parameters.selfSpeed;
+            const thetaB = this.time.delta * this.parameters.speed;
+            this.instancePen.rotation.y += thetaA;
+            this.pen.rotateOnAxis(new THREE.Vector3(0, 1, 0), thetaB);
+        });
+
+        // pen clicked animation using GSAP
+        const targetA = this.parameters;
+        const targetB = this.instancePen.rotation;
+        const { selfSpeed, speed } = targetA;
+        const { x } = targetB;
+
+        this.path = [];
+        // start rotate config.
+        this.path.push({ target: targetA,
+                         delay: 0,
+                         duration: 0.5,
+                         selfSpeed: 0.01,
+                         speed: 0.005,
+                         ease: 'Power1.easeOut',
+                         label: '',
+        });
+        this.path.push({ target: targetB,
+                         delay: 0,
+                         duration: 0.5,
+                         x: 0.001,
+                         ease: 'Power1.easeOut',
+                         label: '<',
+        });
+        // back to the original state config.
+        this.path.push({ target: targetA,
+                         delay: 0,
+                         duration: 4.0,
+                         selfSpeed,
+                         ease: 'Power4.easeIn',
+                         label: '>',
+        });
+        this.path.push({ target: targetA,
+                         delay: 0,
+                         duration: 7.0,
+                         speed,
+                         ease: 'Power1.easeIn',
+                         label: '<',
+        });
+        this.path.push({ target: targetB,
+                         delay: 0,
+                         duration: 2.0,
+                         x,
+                         ease: 'Power1.easeOut',
+                         label: '<',
+        });
+        // execute GSAP animation when the pen is clicked
+        this.time.on('shortClick', async () => {
+            this.intersects = this.controls.raycaster.intersectObjects([this.penBox]);
+            if (this.intersects.length && !this.timeline.isActive()) {
+                this.parameters.spinning = true;
+                this.path.forEach((value) => {
+                    const obj = { ...value };
+                    const { target, label } = obj;
+                    delete obj.target;
+                    delete obj.label;
+                    if (label) {
+                        this.timeline.to(target, obj, label);
+                    } else {
+                        this.timeline.to(target, obj);
+                    }
+                });
+                await this.timeline;
+                this.parameters.spinning = false;
+            }
         });
     }
 

@@ -8,7 +8,7 @@ attribute vec3 aRandomness; // 3D random value for particles
 attribute float aBlink;     // 1D random value for particles
 
 varying vec3 vColor;
-varying float vBlink;        
+// varying float vBlink;        
 
 vec4 permute(vec4 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
 vec2 fade(vec2 t) { return t*t*t*(t*(t*6.0-15.0)+10.0); }
@@ -69,5 +69,5 @@ void main()
     gl_PointSize *= (1.0 / - viewPosition.z);
 
     vColor = color;
-    vBlink = aBlink;
+    // vBlink = aBlink;
 }

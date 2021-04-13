@@ -155,9 +155,14 @@ export default class Labels {
 
         this.time.on('tick', () => {
             this.labels.forEach((label) => {
+                // hide labels if the pen is spinning
+                if (this.role.parameters.spinning) {
+                    label.$point.classList.remove('visible');
+                    return;
+                }
+                // use Raycaster to determine whether the label is behind the mesh
                 raycaster.setFromCamera(label.screenPosition, this.camera.instance);
                 const intersects = raycaster.intersectObjects(obstacles);
-
                 if (intersects.length === 0) {
                     label.$point.classList.add('visible');
                 } else {

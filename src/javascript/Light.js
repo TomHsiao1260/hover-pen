@@ -43,34 +43,36 @@ export default class Light {
 
     // light transition animation using GSAP
     setTransition() {
-        const target = this.directionalLight;
-        const { intensity } = target;
-        const { y } = target.position;
+        const targetA = this.directionalLight;
+        const targetB = this.pointLight;
 
         this.path = [];
         this.path.push({ delay: 0,
                          duration: 5.0,
                          y: -10,
-                         intensity: 0,
+                         intensityA: 0,
+                         intensityB: 5,
                          ease: 'Power1.easeOut',
                          label: 'lightStart',
                          // at the same time as 'cameraLast'
                          addTo: 'cameraLast',
         });
         this.path.push({ delay: 1.0,
-                         duration: 0.2,
-                         y,
-                         intensity,
+                         duration: 0.3,
+                         y: targetA.position.y,
+                         intensityA: targetA.intensity,
+                         intensityB: targetB.intensity,
                          ease: 'Power1.easeOut',
                          label: 'lightEnd',
                          // at the same time as 'particle2'
                          addTo: 'particle2',
         });
 
-        this.path.forEach(({ y, intensity, delay, duration, ease, label, addTo }) => {
+        this.path.forEach(({ y, intensityA, intensityB, delay, duration, ease, label, addTo }) => {
             this.timeline.addLabel(label, addTo);
-            this.timeline.to(target.position, { y, delay, duration, ease }, label);
-            this.timeline.to(target, { intensity, delay, duration, ease }, label);
+            this.timeline.to(targetA.position, { y, delay, duration, ease }, label);
+            this.timeline.to(targetA, { intensity: intensityA, delay, duration, ease }, label);
+            this.timeline.to(targetB, { intensity: intensityB, delay, duration, ease }, label);
         });
     }
 }

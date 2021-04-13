@@ -171,7 +171,8 @@ export default class Particles {
             // particles system resize
             const scale = this.instance.position.y > 0 ? modify : -1;
             const far = this.instance.position.length() / this.penBodyPosition.length();
-            const targetWidth = 20 - 19.999 * far / scale;
+            const { spinning } = this.role.parameters;
+            const targetWidth = (20 - 19.999 * far / scale) * (1 + 2 * spinning);
             const diff = targetWidth - this.material.uniforms.uWidth.value;
             this.material.uniforms.uWidth.value += 0.01 * diff;
         });

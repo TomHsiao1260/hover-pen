@@ -38,7 +38,7 @@ $max-width-mobile: 130px;
             overflow: hidden;
             // for pop up effect
             transform: scale(0, 0);
-            transition: transform 0.5s ease-in-out;
+            transition: transform 0.3s ease-in-out;
             // type from left to right
             &.left
             {

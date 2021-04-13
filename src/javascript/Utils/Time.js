@@ -10,12 +10,18 @@ export default class Time extends EventEmitter {
         this.elapsed = 0;
         this.delta = 16;
 
-        this.stats = new Stats();
-        this.stats.showPanel(0);
-        document.body.appendChild(this.stats.dom);
+        this.setStats();
 
         this.tick = this.tick.bind(this);
         this.tick();
+    }
+
+    setStats() {
+        this.stats = new Stats();
+        this.stats.showPanel(0);
+        if (window.location.hash === '#debug') {
+            document.body.appendChild(this.stats.dom);
+        }
     }
 
     tick() {

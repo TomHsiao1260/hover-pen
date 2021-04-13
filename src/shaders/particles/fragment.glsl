@@ -5,12 +5,12 @@ uniform sampler2D uTexture; // texture for particles
 uniform vec3 uColorShift;   // normalized color shift
 
 varying vec3 vColor;        // particles color
-varying float vBlink;       // 1D random value for particles
+// varying float vBlink;       // 1D random value for particles
 
 void main()
 {
-    float theta = 2.0 * PI * vBlink + 2.0 * uTime;
-    float opacity = sin(theta);
+    // float theta = 2.0 * PI * vBlink + 2.0 * uTime;
+    // float opacity = sin(theta);
 
     gl_FragColor  = texture2D(uTexture, gl_PointCoord);
     // gl_FragColor *= vec4(vColor, opacity);
