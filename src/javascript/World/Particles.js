@@ -74,6 +74,7 @@ export default class Particles {
         });
     }
 
+    // particles transition animation using GSAP
     setTransition() {
         const target = this.material.uniforms.uWidth;
         const { value } = target;
@@ -84,6 +85,7 @@ export default class Particles {
                          value: 1.80 * value,
                          ease: 'Power1.easeOut',
                          label: 'particleStart',
+                         // at the same time as 'cameraStart'
                          addTo: 'cameraStart',
         });
         this.path.push({ delay: 0,
@@ -91,6 +93,7 @@ export default class Particles {
                          value: 0.01 * value,
                          ease: 'Power1.easeOut',
                          label: 'particle1',
+                         // at the same time as 'cameraLast'
                          addTo: 'cameraLast',
         });
         this.path.push({ delay: 0,
@@ -98,6 +101,7 @@ export default class Particles {
                          value: 1.50 * value,
                          ease: 'Power1.easeOut',
                          label: 'particle2',
+                         // after 'particle1'
                          addTo: '>',
         });
         this.path.push({ delay: 2,
@@ -105,6 +109,7 @@ export default class Particles {
                          value: 1.00 * value,
                          ease: 'Power1.easeOut',
                          label: 'particleLast',
+                         // after 'particle2'
                          addTo: '>',
         });
 
@@ -114,6 +119,7 @@ export default class Particles {
         });
     }
 
+    // change particles color when the pen color is changed ('colorChange' event is triggered)
     setColors() {
         this.colorIndex = 0;
         this.colors = [];
@@ -122,12 +128,14 @@ export default class Particles {
 
         this.time.on('colorChange', () => {
             if (!this.timeline.isActive()) {
+                // change color
                 const { shift } = this.colors[this.colorIndex];
                 const { x, y, z } = shift;
                 this.material.uniforms.uColorShift.value.set(x, y, z);
                 this.colorIndex += 1;
                 this.colorIndex %= this.colors.length;
 
+                // particles expansion effect
                 const target = this.material.uniforms.uWidth;
                 const { value } = target;
                 this.timeline.to(target, { duration: 0.3, value: 1.3 * value, ease: 'Power1.easeOut' });
@@ -136,11 +144,15 @@ export default class Particles {
         });
     }
 
+    // the particles move along the pen control by moving the mouse
     async setControls() {
+        // wait 1 second to make sure all transformation matrices are ready
         await new Promise((resolve) => setTimeout(resolve, 1000));
+        // calculate global position for the pen body (in Scene coordinate)
         this.meshRef = this.role.penBody;
         this.penBodyPosition = this.meshRef.position.clone();
 
+        // apply all matrices for each parent by traversing
         while (this.meshRef.parent !== null) {
             const matrix = this.meshRef.parent.matrix.clone();
             this.penBodyPosition = this.penBodyPosition.applyMatrix4(matrix);
@@ -148,12 +160,15 @@ export default class Particles {
         }
         const modify = this.sizes.width > 768 ? 1 : 1.5;
 
+        // mouse: +y: go up & smaller, -y: go down & larger
         this.time.on('tick', () => {
+            // particles system positioning
             const factor = this.controls.mouse.y > 0 ? modify : 1;
             const target = this.penBodyPosition.clone().multiplyScalar(this.controls.mouse.y * factor);
             const movement = target.sub(this.instance.position).multiplyScalar(this.parameters.speed);
             this.instance.position.add(movement);
 
+            // particles system resize
             const scale = this.instance.position.y > 0 ? modify : -1;
             const far = this.instance.position.length() / this.penBodyPosition.length();
             const targetWidth = 20 - 19.999 * far / scale;

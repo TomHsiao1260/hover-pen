@@ -13,6 +13,7 @@ import World from './World';
 export default class Application {
     constructor(_option) {
         this.$canvas = _option.$canvas;
+        // use only one timeline to handle all animations related to GSAP
         this.timeline = gsap.timeline();
 
         this.time = new Time();

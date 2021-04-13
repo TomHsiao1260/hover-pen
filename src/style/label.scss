@@ -6,6 +6,7 @@ $max-width-mobile: 130px;
     position: absolute;
     top: 50%;
     left: 50%;
+    // container for positioning
     .container
     {
         position: absolute;
@@ -26,13 +27,19 @@ $max-width-mobile: 130px;
             font-size: 15px;
             user-select: none;
             font-family: Helvetica, Arial, sans-serif;
+            // blinking cursor (initially transparent)
             border-right: 2px solid transparent;
             border-left: 2px solid transparent;
+            // labels background shadow
             text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0);
+            // disable line breaks
             white-space: nowrap;
+            // ensures the content is not revealed until the animation
             overflow: hidden;
+            // for pop up effect
             transform: scale(0, 0);
             transition: transform 0.5s ease-in-out;
+            // type from left to right
             &.left
             {
                 left: 0;
@@ -43,6 +50,7 @@ $max-width-mobile: 130px;
                     blink 5s ease-in-out infinite alternate;
                 }
             }
+            // type from right to left
             &.right
             {
                 right: 0;
@@ -53,6 +61,7 @@ $max-width-mobile: 130px;
                     blink 5s ease-in-out infinite alternate;
                 }
             }
+            // pop up effect
             &.visible
             {
                 transform: scale(1, 1);

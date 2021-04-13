@@ -62,6 +62,7 @@ export default class Camera {
         this.time.on('tick', () => this.controls.update());
     }
 
+    // Setting camera motion with GSAP
     setTransition() {
         this.path = [];
         this.path.push({ delay: 5,
@@ -77,7 +78,7 @@ export default class Camera {
 
         this.path.forEach(({ delay, duration, point, label }) => {
             const { x, y, z } = point.multiplyScalar(this.scale);
-            this.timeline.to(this.instance.position, { duration, delay, x, y, z }, label);
+            this.timeline.to(this.instance.position, { delay, duration, x, y, z }, label);
         });
     }
 }

@@ -7,7 +7,7 @@ uniform float uWidth;       // size of geometry
 attribute vec3 aRandomness; // 3D random value for particles
 attribute float aBlink;     // 1D random value for particles
 
-varying vec3 vColor;        // particles color
+varying vec3 vColor;
 varying float vBlink;        
 
 vec4 permute(vec4 x) { return mod(((x*34.0)+1.0)*x, 289.0); }

@@ -30,6 +30,7 @@ export default class Labels {
         await this.setHidden();
     }
 
+    // labels DOM
     setDOM() {
         this.labels = [];
         this.label1 = {};
@@ -49,6 +50,7 @@ export default class Labels {
         this.label1.$point.innerText = '23.5 degree tilt';
         this.label2.$point.innerText = 'only 16g pen weight';
 
+        // labels positioning parameters
         this.labels.config = { k: 0.0005, amp: 15 };
         this.label1.config = { shiftX: 28, shiftY: 17, phase: 0.0 * Math.PI };
         this.label2.config = { shiftX: -200, shiftY: 17, phase: 0.5 * Math.PI };
@@ -79,7 +81,9 @@ export default class Labels {
         }
     }
 
+    // calculate global position for each label (in Scene coordinate)
     async setPosition() {
+        // wait 1 second to make sure all transformation matrices are ready
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         this.label1.mesh = this.role.label1;
@@ -87,6 +91,7 @@ export default class Labels {
         this.label1.position = this.label1.mesh.position.clone();
         this.label2.position = this.label2.mesh.position.clone();
 
+        // apply all matrices for each parent by traversing
         this.labels.forEach((value) => {
             const label = value;
             while (label.mesh.parent !== null) {
@@ -97,13 +102,16 @@ export default class Labels {
         });
     }
 
+    // labels animation
     setAnimation() {
         this.time.on('tick', () => {
             this.labels.forEach((value) => {
+                // dynamically project each label position to the 2D screen coordinate (-1 ~ +1)
                 const label = value;
                 label.screenPosition = label.position.clone();
                 label.screenPosition.project(this.camera.instance);
 
+                // resizing and animating (up & down)
                 const theta = this.labels.config.k * this.time.elapsed + label.config.phase;
                 const shift = this.labels.config.amp * Math.sin(theta);
                 let { x, y } = label.screenPosition;
@@ -117,6 +125,7 @@ export default class Labels {
         });
     }
 
+    // display each label with typing effect
     async setDisplay() {
         this.label1.$point.classList.add('visible');
         this.label1.$point.classList.add('typing');
@@ -127,6 +136,7 @@ export default class Labels {
         await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
+    // hide the label if it's behind the meshes
     setHidden() {
         const raycaster = new THREE.Raycaster();
         const obstacles = [];

@@ -5,7 +5,7 @@ import fragmentShader from '../../shaders/loadingPage/fragment.glsl';
 
 export default function LoadingPageMaterial() {
     const uniforms = {
-        uAlpha: { value: 1.0 },
+        uAlpha: { value: 1.0 }, // opacity of the loading page
     };
 
     const material = new THREE.ShaderMaterial({

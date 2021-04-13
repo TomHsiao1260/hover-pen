@@ -2,7 +2,7 @@
 
 uniform float uTime;        // normalized progress time  
 uniform sampler2D uTexture; // texture for particles
-uniform vec3 uColorShift;
+uniform vec3 uColorShift;   // normalized color shift
 
 varying vec3 vColor;        // particles color
 varying float vBlink;       // 1D random value for particles

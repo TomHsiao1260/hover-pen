@@ -8,9 +8,13 @@ export default function particlesMaterial(_option) {
 
     const uniforms = {
         uTime: { value: 0 },
+        // particles texture
         uTexture: { value: spotTexture },
+        // particles activity space
         uWidth: { value: 20 },
+        // normalized color shift of each particle
         uColorShift: { value: new THREE.Vector3() },
+        // particles size
         uSize: { value: 100 * window.application.renderer.getPixelRatio() },
     };
 
