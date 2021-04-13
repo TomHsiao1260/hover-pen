@@ -3,6 +3,7 @@ import * as THREE from 'three';
 export default class Light {
     constructor(_option) {
         this.debug = _option.debug;
+        this.timeline = _option.timeline;
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
@@ -38,5 +39,38 @@ export default class Light {
             this.debugFolder.add(this.pointLight, 'intensity').min(0).max(20).step(0.001).name('pointIntensity');
             this.debugFolder.add(this.directionalLight, 'intensity').min(0).max(20).step(0.001).name('directionalIntensity');
         }
+    }
+
+    // light transition animation using GSAP
+    setTransition() {
+        const target = this.directionalLight;
+        const { intensity } = target;
+        const { y } = target.position;
+
+        this.path = [];
+        this.path.push({ delay: 0,
+                         duration: 5.0,
+                         y: -10,
+                         intensity: 0,
+                         ease: 'Power1.easeOut',
+                         label: 'lightStart',
+                         // at the same time as 'cameraLast'
+                         addTo: 'cameraLast',
+        });
+        this.path.push({ delay: 1.0,
+                         duration: 0.2,
+                         y,
+                         intensity,
+                         ease: 'Power1.easeOut',
+                         label: 'lightEnd',
+                         // at the same time as 'particle2'
+                         addTo: 'particle2',
+        });
+
+        this.path.forEach(({ y, intensity, delay, duration, ease, label, addTo }) => {
+            this.timeline.addLabel(label, addTo);
+            this.timeline.to(target.position, { y, delay, duration, ease }, label);
+            this.timeline.to(target, { intensity, delay, duration, ease }, label);
+        });
     }
 }

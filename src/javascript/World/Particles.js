@@ -96,7 +96,7 @@ export default class Particles {
                          // at the same time as 'cameraLast'
                          addTo: 'cameraLast',
         });
-        this.path.push({ delay: 0,
+        this.path.push({ delay: 1.0,
                          duration: 0.5,
                          value: 1.50 * value,
                          ease: 'Power1.easeOut',

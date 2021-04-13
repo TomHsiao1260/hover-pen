@@ -49,6 +49,7 @@ export default class World {
     async setTransition() {
         this.camera.setTransition();
         this.particles.setTransition();
+        this.light.setTransition();
 
         await this.timeline;
 
