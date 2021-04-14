@@ -9,6 +9,7 @@ import Role from './Role';
 
 export default class World {
     constructor(_option) {
+        this.$canvas = _option.$canvas;
         this.resources = _option.resources;
         this.time = _option.time;
         this.sizes = _option.sizes;
@@ -55,6 +56,7 @@ export default class World {
 
         this.labels.start();
         this.role.setColor();
+        this.role.setMouse();
         this.particles.setControls();
         this.camera.controls.enabled = true;
     }
@@ -69,6 +71,7 @@ export default class World {
 
     setRole() {
         this.role = new Role({
+            $canvas: this.$canvas,
             resources: this.resources,
             time: this.time,
             debug: this.debug,

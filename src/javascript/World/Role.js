@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 export default class Role {
     constructor(_option) {
+        this.$canvas = _option.$canvas;
         this.resources = _option.resources;
         this.time = _option.time;
         this.debug = _option.debug;
@@ -226,6 +227,24 @@ export default class Role {
                 this.colorIndex %= this.colors.length;
 
                 this.time.trigger('colorChange');
+            }
+        });
+    }
+
+    // mouse cursor change when hovering on the pen meshes
+    setMouse() {
+        this.hoverMeshes = [];
+        this.hoverMeshes.push(this.base1Box);
+        this.hoverMeshes.push(this.base2Box);
+        this.hoverMeshes.push(this.ringBox);
+        this.hoverMeshes.push(this.penBox);
+
+        this.time.on(('tick'), () => {
+            this.intersects = this.controls.raycaster.intersectObjects(this.hoverMeshes);
+            if (this.intersects.length && !this.timeline.isActive()) {
+                this.$canvas.classList.add('hover');
+            } else {
+                this.$canvas.classList.remove('hover');
             }
         });
     }

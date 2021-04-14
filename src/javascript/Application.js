@@ -88,6 +88,7 @@ export default class Application {
 
     setWorld() {
         this.world = new World({
+            $canvas: this.$canvas,
             resources: this.resources,
             time: this.time,
             sizes: this.sizes,
