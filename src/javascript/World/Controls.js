@@ -12,6 +12,8 @@ export default class Controls {
     setMouse() {
         this.mouse = new THREE.Vector2();
         this.raycaster = new THREE.Raycaster();
+        // 0: mouse Down, >1: mouse Up
+        this.mouse.down = 0;
 
         // triggered when the mouse moves
         window.addEventListener('mousemove', (event) => {
@@ -19,22 +21,24 @@ export default class Controls {
             this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
         });
 
+        // after clicking the mouse (can't use 'mousedown' event because of the OrbitControls library)
+        window.addEventListener('pointerdown', () => {
+            this.mouse.start = this.time.elapsed;
+            this.mouse.down += 1;
+            this.time.trigger('click');
+        });
+
         // after releasing the mouse button
         window.addEventListener('click', (event) => {
             this.mouse.x = event.clientX / this.sizes.width * 2 - 1;
             this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
 
-            this.time.trigger('click');
-
             this.mouse.end = this.time.elapsed;
             if (this.mouse.end - this.mouse.start < 300) {
                 this.time.trigger('shortClick');
             }
-        });
-
-        // after clicking the mouse (can't use 'mousedown' event because of the OrbitControls library)
-        window.addEventListener('pointerdown', () => {
-            this.mouse.start = this.time.elapsed;
+            // add some time delay after the mouse is up
+            window.setTimeout(() => { this.mouse.down -= 1; }, 1000);
         });
 
         // touch move on mobile
@@ -48,6 +52,7 @@ export default class Controls {
             this.mouse.x = event.touches[0].clientX / this.sizes.width * 2 - 1;
             this.mouse.y = -(event.touches[0].clientY / this.sizes.height) * 2 + 1;
             this.mouse.start = this.time.elapsed;
+            this.mouse.down += 1;
 
             this.time.trigger('click');
         });
@@ -55,9 +60,12 @@ export default class Controls {
         // touch end on mobile
         window.addEventListener('touchend', () => {
             this.mouse.end = this.time.elapsed;
+
             if (this.mouse.end - this.mouse.start < 300) {
                 this.time.trigger('shortClick');
             }
+            // add some time delay after the mouse is up
+            window.setTimeout(() => { this.mouse.down -= 1; }, 1000);
         });
 
         // set up the Raycaster based on mouse events

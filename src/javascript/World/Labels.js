@@ -6,6 +6,7 @@ export default class Labels {
         this.time = _option.time;
         this.sizes = _option.sizes;
         this.camera = _option.camera;
+        this.controls = _option.controls;
         this.debug = _option.debug;
 
         this.container = new THREE.Object3D();
@@ -23,10 +24,10 @@ export default class Labels {
         await this.setData();
         await this.setDOM();
         await this.setPosition();
-        await this.setAnimation();
     }
 
     async start() {
+        await this.setAnimation();
         await this.setDisplay();
         await this.setHidden();
     }
@@ -41,21 +42,19 @@ export default class Labels {
         this.label1.name = 'label1';
         this.label1.className = 'point point-1 left';
         this.label1.innerText = '23.5 degree tilt';
-        this.label1.config = { shiftX: 28, shiftY: 17, phase: 0.0 * Math.PI };
+        this.label1.config = { shiftX: 28, shiftY: 17 };
         this.label1.wait = 1500;
 
         this.label2.name = 'label2';
         this.label2.className = 'point point-2 right';
         this.label2.innerText = 'only 16g pen weight';
-        this.label2.config = { shiftX: -200, shiftY: 17, phase: 0.5 * Math.PI };
+        this.label2.config = { shiftX: -200, shiftY: 17 };
         this.label2.wait = 2000;
 
-        this.labels.config = { k: 0.0005, amp: 15 };
         // labels positioning parameters (on mobile)
         if (this.sizes.width < 768) {
-            this.labels.config = { k: 0.0005, amp: 10 };
-            this.label1.config = { shiftX: 0, shiftY: -20, phase: 0.0 * Math.PI };
-            this.label2.config = { shiftX: -172, shiftY: 8, phase: 0.5 * Math.PI };
+            this.label1.config = { shiftX: 0, shiftY: -20 };
+            this.label2.config = { shiftX: -172, shiftY: 8 };
         }
     }
 
@@ -79,14 +78,8 @@ export default class Labels {
                 this.role[label.name].add(new THREE.AxesHelper(0.5));
                 this.debugFolder.add(label.config, 'shiftX').min(-300).max(300).step(1).name(`${label.name} shiftX`);
                 this.debugFolder.add(label.config, 'shiftY').min(-300).max(300).step(1).name(`${label.name} shiftY`);
-                this.debugFolder.add(label.config, 'phase').min(-4).max(4).step(0.1).name(`${label.name} phase`);
             }
         });
-
-        if (this.debug) {
-            this.debugFolder.add(this.labels.config, 'k').min(0).max(0.01).step(0.0001).name('labels k');
-            this.debugFolder.add(this.labels.config, 'amp').min(0).max(50).step(1).name('labels ampitude');
-        }
     }
 
     // calculate global position for each label (in Scene coordinate)
@@ -108,26 +101,29 @@ export default class Labels {
         });
     }
 
-    // labels animation
+    // dynamically project each label on 2D screen
     setAnimation() {
+        this.setProjection();
         this.time.on('tick', () => {
-            this.labels.forEach((value) => {
-                // dynamically project each label position to the 2D screen coordinate (-1 ~ +1)
-                const label = value;
-                label.screenPosition = label.position.clone();
-                label.screenPosition.project(this.camera.instance);
+            if (this.controls.mouse.down) this.setProjection();
+        });
+    }
 
-                // resizing and animating (up & down)
-                const theta = this.labels.config.k * this.time.elapsed + label.config.phase;
-                const shift = this.labels.config.amp * Math.sin(theta);
-                let { x, y } = label.screenPosition;
-                x *= this.sizes.width * 0.5;
-                y *= -this.sizes.height * 0.5;
-                x += label.config.shiftX;
-                y -= label.config.shiftY + shift;
+    setProjection() {
+        this.labels.forEach((value) => {
+            // dynamically project each label position to the 2D screen coordinate (-1 ~ +1)
+            const label = value;
+            label.screenPosition = label.position.clone();
+            label.screenPosition.project(this.camera.instance);
 
-                label.$container.style.transform = `translateX(${x}px) translateY(${y}px)`;
-            });
+            let { x, y } = label.screenPosition;
+            x *= this.sizes.width * 0.5;
+            y *= -this.sizes.height * 0.5;
+            x += label.config.shiftX;
+            y -= label.config.shiftY;
+
+            // update each label position
+            label.$container.style.transform = `translateX(${x}px) translateY(${y}px)`;
         });
     }
 
