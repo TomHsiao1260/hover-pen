@@ -11,9 +11,9 @@ void main()
 {
     // float theta = 2.0 * PI * vBlink + 2.0 * uTime;
     // float opacity = sin(theta);
+    vec3 color = vColor + uColorShift;
 
     gl_FragColor  = texture2D(uTexture, gl_PointCoord);
     // gl_FragColor *= vec4(vColor, opacity);
-    gl_FragColor *= vec4(vColor, 1.0);
-    gl_FragColor.rgb += uColorShift;
+    gl_FragColor *= vec4(color, 1.0);
 }
