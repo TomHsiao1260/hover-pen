@@ -12,6 +12,7 @@ export default class Role {
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
+        this.callbacks = {};
 
         if (this.debug) {
             this.debugFolder = this.debug.addFolder('role');
@@ -71,7 +72,7 @@ export default class Role {
 
                 default: break;
             }
-            // if (this.debug) this.debugFolder.add(child, 'visible').name(child.name);
+            if (this.debug) this.debugFolder.add(child, 'visible').name(child.name);
         });
     }
 
@@ -127,7 +128,7 @@ export default class Role {
     // pen animation
     setAnimation() {
         // set animation parameters into tick function
-        this.time.on('tick', () => {
+        this.callbacks.slowRotation = this.time.on('tick', () => {
             const thetaA = this.time.delta * this.parameters.selfSpeed;
             const thetaB = this.time.delta * this.parameters.speed;
             this.instancePen.rotation.y += thetaA;
@@ -180,7 +181,7 @@ export default class Role {
                          label: '<',
         });
         // execute GSAP animation when the pen is clicked
-        this.time.on('shortClick', async () => {
+        this.callbacks.spinning = this.time.on('shortClick', async () => {
             this.intersects = this.controls.raycaster.intersectObjects([this.penBox]);
             if (this.intersects.length && !this.timeline.isActive()) {
                 this.parameters.spinning = true;
@@ -213,7 +214,7 @@ export default class Role {
         this.colors.push({ color: '#131318', metalness: 0.90, lightIntensity: 5.0 });
         this.colors.push({ color: '#000000', metalness: 0.00, lightIntensity: 0.0 });
 
-        this.time.on('shortClick', () => {
+        this.callbacks.colorChange = this.time.on('shortClick', () => {
             this.intersects = this.controls.raycaster.intersectObjects(this.rayColorMeshes);
             if (this.intersects.length && !this.timeline.isActive()) {
                 // change the material color of the pen body mesh
@@ -228,6 +229,12 @@ export default class Role {
 
                 this.time.trigger('colorChange');
             }
+        // would execute after removing the event
+        }, () => {
+            const { color, metalness, lightIntensity } = this.colors[this.colors.length - 1];
+            this.penBody.material.color.set(color);
+            this.penBody.material.metalness = metalness;
+            this.light.ambientLight.intensity = lightIntensity;
         });
     }
 
@@ -239,13 +246,14 @@ export default class Role {
         this.hoverMeshes.push(this.ringBox);
         this.hoverMeshes.push(this.penBox);
 
-        this.time.on(('tick'), () => {
+        this.callbacks.mouseHover = this.time.on(('tick'), () => {
             this.intersects = this.controls.raycaster.intersectObjects(this.hoverMeshes);
             if (this.intersects.length && !this.timeline.isActive()) {
                 this.$canvas.classList.add('hover');
             } else {
                 this.$canvas.classList.remove('hover');
             }
-        });
+        // would execute after removing the event
+        }, () => this.$canvas.classList.remove('hover'));
     }
 }

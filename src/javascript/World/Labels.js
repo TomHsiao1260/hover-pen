@@ -11,6 +11,7 @@ export default class Labels {
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
+        this.callbacks = {};
 
         if (this.debug) {
             this.debugFolder = this.debug.addFolder('label');
@@ -104,7 +105,7 @@ export default class Labels {
     // dynamically project each label on 2D screen
     setAnimation() {
         this.setProjection();
-        this.time.on('tick', () => {
+        this.callbacks.projection = this.time.on('tick', () => {
             if (this.controls.mouse.down) this.setProjection();
         });
     }
@@ -149,7 +150,7 @@ export default class Labels {
         obstacles.push(this.role.base1Box);
         obstacles.push(this.role.base2Box);
 
-        this.time.on('tick', () => {
+        this.callbacks.hidden = this.time.on('tick', () => {
             this.labels.forEach((label) => {
                 // hide labels if the pen is spinning
                 if (this.role.parameters.spinning) {
@@ -172,6 +173,7 @@ export default class Labels {
                     }
                 }
             });
-        });
+        // would execute after removing the event
+        }, () => this.labels.forEach((label) => label.$point.classList.remove('visible')));
     }
 }

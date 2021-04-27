@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 import LoadingPage from './LoadingPage';
+import Transitions from './Transitions';
 import Controls from './Controls';
 import Labels from './Labels';
 import Particles from './Particles';
@@ -36,7 +37,7 @@ export default class World {
         this.resources.on('ready', () => this.start());
     }
 
-    start() {
+    async start() {
         this.loadingPage.setFinish();
         this.materials.setMaterials();
 
@@ -45,20 +46,9 @@ export default class World {
         this.setLabels();
         this.setParticles();
         this.setTransition();
-    }
 
-    async setTransition() {
-        this.camera.setTransition();
-        this.particles.setTransition();
-        this.light.setTransition();
-
-        await this.timeline;
-
-        this.labels.start();
-        this.role.setColor();
-        this.role.setMouse();
-        this.particles.setControls();
-        this.camera.controls.enabled = true;
+        await this.transitions.setPen();
+        await this.transitions.setPenEnd();
     }
 
     setControls() {
@@ -109,5 +99,17 @@ export default class World {
         });
 
         this.container.add(this.particles.container);
+    }
+
+    setTransition() {
+        this.transitions = new Transitions({
+            time: this.time,
+            camera: this.camera,
+            particles: this.particles,
+            role: this.role,
+            labels: this.labels,
+            light: this.light,
+            timeline: this.timeline,
+        });
     }
 }

@@ -13,6 +13,7 @@ export default class Particles {
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
+        this.callbacks = {};
 
         if (this.debug) {
             this.debugFolder = this.debug.addFolder('particles');
@@ -69,7 +70,7 @@ export default class Particles {
             this.debugFolder.add(this.material.uniforms.uColorShift.value, 'z').min(-0.5).max(0.5).step(0.01).name('blue shift');
         }
 
-        this.time.on('tick', () => {
+        this.callbacks.drift = this.time.on('tick', () => {
             this.material.uniforms.uTime.value = this.time.elapsed / 1000;
         });
     }
@@ -126,12 +127,11 @@ export default class Particles {
         this.colors.push({ shift: new THREE.Vector3(0.0, 0.3, 0.0) });
         this.colors.push({ shift: new THREE.Vector3(0.0, 0.0, 0.0) });
 
-        this.time.on('colorChange', () => {
+        this.callbacks.colorChange = this.time.on('colorChange', () => {
             if (!this.timeline.isActive()) {
                 // change color
                 const { shift } = this.colors[this.colorIndex];
-                const { x, y, z } = shift;
-                this.material.uniforms.uColorShift.value.set(x, y, z);
+                this.material.uniforms.uColorShift.value.copy(shift);
                 this.colorIndex += 1;
                 this.colorIndex %= this.colors.length;
 
@@ -141,6 +141,10 @@ export default class Particles {
                 this.timeline.to(target, { duration: 0.3, value: 1.3 * value, ease: 'Power1.easeOut' });
                 this.timeline.to(target, { duration: 1.5, value: 1.0 * value, ease: 'Power1.easeOut' });
             }
+        // would execute after removing the event
+        }, () => {
+            const { shift } = this.colors[this.colors.length - 1];
+            this.material.uniforms.uColorShift.value.copy(shift);
         });
     }
 
@@ -161,7 +165,7 @@ export default class Particles {
         const modify = this.sizes.width > 768 ? 1 : 1.5;
 
         // mouse: +y: go up & smaller, -y: go down & larger
-        this.time.on('tick', () => {
+        this.callbacks.moveUp = this.time.on('tick', () => {
             // particles system positioning
             const factor = this.controls.mouse.y > 0 ? modify : 1;
             const target = this.penBodyPosition.clone().multiplyScalar(this.controls.mouse.y * factor);
