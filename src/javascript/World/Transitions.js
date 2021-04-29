@@ -9,10 +9,10 @@ export default class Transitions {
         this.timeline = _option.timeline;
     }
 
-    async setPen() {
-        this.camera.setTransition();
-        this.particles.setTransition();
-        this.light.setTransition();
+    async penFocus() {
+        this.camera.setPenTransition();
+        this.particles.setPenTransition();
+        this.light.setPenTransition();
 
         await this.timeline;
 
@@ -21,11 +21,16 @@ export default class Transitions {
         this.role.setMouse();
         this.particles.setControls();
         this.camera.controls.enabled = true;
-
-        await new Promise((resolve) => setTimeout(resolve, 30000));
     }
 
-    setPenEnd() {
+    async firstSceneFocus() {
+        this.particles.setFirstSceneTransition();
+        this.role.setPenMin();
+
+        await this.timeline;
+    }
+
+    removePenCallbacks() {
         this.time.remove(this.labels.callbacks.projection);
         this.time.remove(this.labels.callbacks.hidden);
         this.time.remove(this.particles.callbacks.colorChange);
@@ -34,7 +39,5 @@ export default class Transitions {
         this.time.remove(this.role.callbacks.colorChange);
         this.time.remove(this.role.callbacks.spinning);
         this.time.remove(this.role.callbacks.mouseHover);
-
-        this.light.container.visible = false;
     }
 }

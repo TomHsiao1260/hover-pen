@@ -56,6 +56,7 @@ export default class Particles {
 
     setParticles() {
         this.material = this.materials.items.shader.particles;
+        this.parameters.uWidth = this.material.uniforms.uWidth;
         this.instance = new THREE.Points(this.geometry, this.material);
         this.container.add(this.instance);
 
@@ -72,51 +73,6 @@ export default class Particles {
 
         this.callbacks.drift = this.time.on('tick', () => {
             this.material.uniforms.uTime.value = this.time.elapsed / 1000;
-        });
-    }
-
-    // particles transition animation using GSAP
-    setTransition() {
-        const target = this.material.uniforms.uWidth;
-        const { value } = target;
-
-        this.path = [];
-        this.path.push({ delay: 12,
-                         duration: 0.5,
-                         value: 1.80 * value,
-                         ease: 'Power1.easeOut',
-                         label: 'particleStart',
-                         // at the same time as 'cameraStart'
-                         addTo: 'cameraStart',
-        });
-        this.path.push({ delay: 0,
-                         duration: 4.5,
-                         value: 0.01 * value,
-                         ease: 'Power1.easeOut',
-                         label: 'particle1',
-                         // at the same time as 'cameraLast'
-                         addTo: 'cameraLast',
-        });
-        this.path.push({ delay: 1.0,
-                         duration: 0.5,
-                         value: 1.50 * value,
-                         ease: 'Power1.easeOut',
-                         label: 'particle2',
-                         // after 'particle1'
-                         addTo: '>',
-        });
-        this.path.push({ delay: 2,
-                         duration: 0.5,
-                         value: 1.00 * value,
-                         ease: 'Power1.easeOut',
-                         label: 'particleLast',
-                         // after 'particle2'
-                         addTo: '>',
-        });
-
-        this.path.forEach(({ delay, duration, value, ease, label, addTo }) => {
-            this.timeline.addLabel(label, addTo);
-            this.timeline.to(target, { delay, duration, value, ease }, label);
         });
     }
 
@@ -179,6 +135,68 @@ export default class Particles {
             const targetWidth = (20 - 19.999 * far / scale) * (1 + 2 * spinning);
             const diff = targetWidth - this.material.uniforms.uWidth.value;
             this.material.uniforms.uWidth.value += 0.01 * diff;
+        });
+    }
+
+    // particles transition animation using GSAP
+    setPenTransition() {
+        const target = this.material.uniforms.uWidth;
+        const { value } = target;
+
+        this.path = [];
+        this.path.push({ delay: 12,
+                         duration: 0.5,
+                         value: 1.80 * value,
+                         ease: 'Power1.easeOut',
+                         label: 'particleStart',
+                         // at the same time as 'cameraStart'
+                         addTo: 'cameraStart',
+        });
+        this.path.push({ delay: 0,
+                         duration: 4.5,
+                         value: 0.01 * value,
+                         ease: 'Power1.easeOut',
+                         label: 'particle1',
+                         // at the same time as 'cameraLast'
+                         addTo: 'cameraLast',
+        });
+        this.path.push({ delay: 1.0,
+                         duration: 0.5,
+                         value: 1.50 * value,
+                         ease: 'Power1.easeOut',
+                         label: 'particle2',
+                         // after 'particle1'
+                         addTo: '>',
+        });
+        this.path.push({ delay: 2,
+                         duration: 0.5,
+                         value: 1.00 * value,
+                         ease: 'Power1.easeOut',
+                         label: 'particleLast',
+                         // after 'particle2'
+                         addTo: '>',
+        });
+
+        this.path.forEach(({ delay, duration, value, ease, label, addTo }) => {
+            this.timeline.addLabel(label, addTo);
+            this.timeline.to(target, { delay, duration, value, ease }, label);
+        });
+    }
+
+    setFirstSceneTransition() {
+        const target = this.material.uniforms.uWidth;
+        const { value } = this.parameters.uWidth;
+
+        this.path = [];
+        this.path.push({ delay: 0,
+                         duration: 10,
+                         value: 3.0 * value,
+                         ease: 'Power1.easeOut',
+                         label: 'firstSceneStart',
+        });
+
+        this.path.forEach(({ delay, duration, value, ease, label }) => {
+            this.timeline.to(target, { delay, duration, value, ease }, label);
         });
     }
 }

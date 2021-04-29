@@ -37,14 +37,25 @@ export default class Role {
         this.parameters.color = '#000000';
         this.parameters.spinning = false;
 
+        // original pen
         this.instance = this.resources.items.pen.scene;
         this.instance.scale.set(3, 3, 3);
         this.instance.position.set(0, 0, 0);
         this.instance.rotation.y = Math.PI * this.parameters.rotate;
         this.container.add(this.instance);
+
+        // low poly pen
+        this.instanceMin = this.resources.items.penMin.scene;
+        this.instanceMin.scale.set(3, 3, 3);
+        this.instanceMin.position.set(0, 0, 0);
+        this.instanceMin.rotation.y = Math.PI * this.parameters.rotate;
+        this.instanceMin.visible = false;
+        this.container.add(this.instanceMin);
     }
 
     setTraverse() {
+        if (this.debug) this.penFolder = this.debugFolder.addFolder('pen');
+        // original pen
         this.instance.traverse((child) => {
             switch (child.name) {
                 // pen only
@@ -72,7 +83,18 @@ export default class Role {
 
                 default: break;
             }
-            if (this.debug) this.debugFolder.add(child, 'visible').name(child.name);
+            if (this.debug) this.penFolder.add(child, 'visible').name(child.name);
+        });
+
+        if (this.debug) this.penBakedFolder = this.debugFolder.addFolder('pen baked');
+        // low poly pen
+        this.instanceMin.traverse((child) => {
+            switch (child.name) {
+                case 'mergePen': this.mergePen = child; break;
+                case 'mergeBase': this.mergeBase = child; break;
+                default: break;
+            }
+            if (this.debug) this.penBakedFolder.add(child, 'visible').name(child.name);
         });
     }
 
@@ -255,5 +277,12 @@ export default class Role {
             }
         // would execute after removing the event
         }, () => this.$canvas.classList.remove('hover'));
+    }
+
+    setPenMin() {
+        this.timeline.add(() => {
+            this.instance.visible = false;
+            this.instanceMin.visible = true;
+        }, 'firstSceneStart');
     }
 }

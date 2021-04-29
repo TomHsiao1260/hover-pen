@@ -1,5 +1,6 @@
 import LoadingPageMaterial from '../Materials/LoadingPage';
 import ParticlesMaterial from '../Materials/Particles';
+// import PenMaterial from '../Materials/Pen';
 
 export default class Materials {
     constructor(_option) {
@@ -17,8 +18,9 @@ export default class Materials {
 
     // Other materials would be initialized afer resources are ready
     setMaterials() {
-        this.items.shader.particles = new ParticlesMaterial({
-            resources: this.resources,
-        });
+        this.items.basic = {};
+        // this.items.basic.pen = new PenMaterial({ resources: this.resources });
+
+        this.items.shader.particles = new ParticlesMaterial({ resources: this.resources });
     }
 }

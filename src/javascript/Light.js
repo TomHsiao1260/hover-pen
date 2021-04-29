@@ -42,7 +42,7 @@ export default class Light {
     }
 
     // light transition animation using GSAP
-    setTransition() {
+    setPenTransition() {
         const targetA = this.directionalLight;
         const targetB = this.pointLight;
 

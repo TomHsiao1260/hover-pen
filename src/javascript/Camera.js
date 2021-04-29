@@ -63,7 +63,7 @@ export default class Camera {
     }
 
     // Setting camera motion with GSAP
-    setTransition() {
+    setPenTransition() {
         this.path = [];
         this.path.push({ delay: 5,
                          duration: 10.0,

@@ -47,8 +47,11 @@ export default class World {
         this.setParticles();
         this.setTransition();
 
-        await this.transitions.setPen();
-        await this.transitions.setPenEnd();
+        await this.transitions.penFocus();
+        await new Promise((resolve) => setTimeout(resolve, 10000));
+
+        await this.transitions.removePenCallbacks();
+        await this.transitions.firstSceneFocus();
     }
 
     setControls() {
