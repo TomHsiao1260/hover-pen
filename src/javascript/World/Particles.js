@@ -56,9 +56,11 @@ export default class Particles {
 
     setParticles() {
         this.material = this.materials.items.shader.particles;
-        this.parameters.uWidth = this.material.uniforms.uWidth;
         this.instance = new THREE.Points(this.geometry, this.material);
         this.container.add(this.instance);
+
+        this.parameters.uWidth = this.material.uniforms.uWidth;
+        this.parameters.uSize = this.material.uniforms.uSize;
 
         if (this.debug) {
             this.axes = new THREE.AxesHelper();
@@ -148,55 +150,61 @@ export default class Particles {
                          duration: 0.5,
                          value: 1.80 * value,
                          ease: 'Power1.easeOut',
-                         label: 'particleStart',
-                         // at the same time as 'cameraStart'
-                         addTo: 'cameraStart',
+                         label: 'particleExpand',
+                         addTo: 'cameraUp',
         });
         this.path.push({ delay: 0,
                          duration: 4.5,
                          value: 0.01 * value,
                          ease: 'Power1.easeOut',
-                         label: 'particle1',
-                         // at the same time as 'cameraLast'
-                         addTo: 'cameraLast',
+                         label: 'particleShrink',
+                         addTo: 'cameraDown',
         });
         this.path.push({ delay: 1.0,
                          duration: 0.5,
                          value: 1.50 * value,
                          ease: 'Power1.easeOut',
-                         label: 'particle2',
-                         // after 'particle1'
+                         label: 'particleBurst',
                          addTo: '>',
         });
         this.path.push({ delay: 2,
                          duration: 0.5,
                          value: 1.00 * value,
                          ease: 'Power1.easeOut',
-                         label: 'particleLast',
-                         // after 'particle2'
+                         label: 'particleNormal',
                          addTo: '>',
         });
 
-        this.path.forEach(({ delay, duration, value, ease, label, addTo }) => {
+        this.path.forEach((obj) => {
+            const { label, addTo, ...props } = obj;
             this.timeline.addLabel(label, addTo);
-            this.timeline.to(target, { delay, duration, value, ease }, label);
+            this.timeline.to(target, props, label);
         });
     }
 
     setFirstSceneTransition() {
-        const target = this.material.uniforms.uWidth;
-        const { value } = this.parameters.uWidth;
+        const targetA = this.material.uniforms.uWidth;
+        const targetB = this.material.uniforms.uSize;
+        const valueA = this.parameters.uWidth.value;
+        const valueB = this.parameters.uSize.value;
 
         this.path = [];
         this.path.push({ delay: 0,
-                         duration: 10,
-                         value: 3.0 * value,
+                         duration: 5.0,
                          ease: 'Power1.easeOut',
-                         label: 'firstSceneStart',
+                         valueA: 3.0 * valueA,
+                         valueB: 3.0 * valueB,
+                         label: 'particleExpand',
+                         addTo: 'sceneStart',
         });
 
-        this.path.forEach(({ delay, duration, value, ease, label }) => {
-            this.timeline.to(target, { delay, duration, value, ease }, label);
+        this.path.forEach((obj) => {
+            const { label, addTo, ...props } = obj;
+            const { valueA, valueB, ...common } = props;
+
+            this.timeline.addLabel(label, addTo);
+            this.timeline.to(targetA, { value: valueA, ...common }, label);
+            this.timeline.to(targetB, { value: valueB, ...common }, label);
         });
     }
 }

@@ -1,6 +1,6 @@
 import LoadingPageMaterial from '../Materials/LoadingPage';
 import ParticlesMaterial from '../Materials/Particles';
-// import PenMaterial from '../Materials/Pen';
+import Scene1Material from '../Materials/Scene1';
 
 export default class Materials {
     constructor(_option) {
@@ -19,7 +19,7 @@ export default class Materials {
     // Other materials would be initialized afer resources are ready
     setMaterials() {
         this.items.basic = {};
-        // this.items.basic.pen = new PenMaterial({ resources: this.resources });
+        this.items.basic.scene1 = new Scene1Material({ resources: this.resources });
 
         this.items.shader.particles = new ParticlesMaterial({ resources: this.resources });
     }

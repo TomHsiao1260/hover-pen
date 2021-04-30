@@ -7,6 +7,7 @@ import Labels from './Labels';
 import Particles from './Particles';
 import Materials from './Materials';
 import Role from './Role';
+import Scene1 from './Scene1';
 
 export default class World {
     constructor(_option) {
@@ -45,10 +46,11 @@ export default class World {
         this.setRole();
         this.setLabels();
         this.setParticles();
+        this.setScene1();
         this.setTransition();
 
         await this.transitions.penFocus();
-        await new Promise((resolve) => setTimeout(resolve, 10000));
+        await new Promise((resolve) => setTimeout(resolve, 15000));
 
         await this.transitions.removePenCallbacks();
         await this.transitions.firstSceneFocus();
@@ -104,12 +106,26 @@ export default class World {
         this.container.add(this.particles.container);
     }
 
+    setScene1() {
+        this.scene1 = new Scene1({
+            time: this.time,
+            debug: this.debug,
+            camera: this.camera,
+            timeline: this.timeline,
+            resources: this.resources,
+            materials: this.materials,
+        });
+
+        this.container.add(this.scene1.container);
+    }
+
     setTransition() {
         this.transitions = new Transitions({
             time: this.time,
             camera: this.camera,
             particles: this.particles,
             role: this.role,
+            scene1: this.scene1,
             labels: this.labels,
             light: this.light,
             timeline: this.timeline,

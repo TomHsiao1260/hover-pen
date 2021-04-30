@@ -43,36 +43,38 @@ export default class Light {
 
     // light transition animation using GSAP
     setPenTransition() {
-        const targetA = this.directionalLight;
-        const targetB = this.pointLight;
+        const targetA = this.pointLight;
+        const targetB = this.directionalLight;
+        const targetC = this.directionalLight.position;
 
         this.path = [];
         this.path.push({ delay: 0,
                          duration: 5.0,
-                         y: -10,
-                         intensityA: 0,
-                         intensityB: 5,
+                         intensityA: 5,
+                         intensityB: 0,
+                         yC: -10,
                          ease: 'Power1.easeOut',
-                         label: 'lightStart',
-                         // at the same time as 'cameraLast'
-                         addTo: 'cameraLast',
+                         label: 'lightDark',
+                         addTo: 'cameraDown',
         });
         this.path.push({ delay: 1.0,
                          duration: 0.3,
-                         y: targetA.position.y,
                          intensityA: targetA.intensity,
                          intensityB: targetB.intensity,
+                         yC: targetC.y,
                          ease: 'Power1.easeOut',
-                         label: 'lightEnd',
-                         // at the same time as 'particle2'
-                         addTo: 'particle2',
+                         label: 'lightNormal',
+                         addTo: 'particleBurst',
         });
 
-        this.path.forEach(({ y, intensityA, intensityB, delay, duration, ease, label, addTo }) => {
+        this.path.forEach((obj) => {
+            const { label, addTo, ...props } = obj;
+            const { intensityA, intensityB, yC, ...common } = props;
+
             this.timeline.addLabel(label, addTo);
-            this.timeline.to(targetA.position, { y, delay, duration, ease }, label);
-            this.timeline.to(targetA, { intensity: intensityA, delay, duration, ease }, label);
-            this.timeline.to(targetB, { intensity: intensityB, delay, duration, ease }, label);
+            this.timeline.to(targetA, { intensity: intensityA, ...common }, label);
+            this.timeline.to(targetB, { intensity: intensityB, ...common }, label);
+            this.timeline.to(targetC, { y: yC, ...common }, label);
         });
     }
 }

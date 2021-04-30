@@ -42,13 +42,13 @@ export default class Labels {
 
         this.label1.name = 'label1';
         this.label1.className = 'point point-1 left';
-        this.label1.innerText = '23.5 degree tilt';
+        this.label1.innerText = 'first 23.5° anti-gravity pen';
         this.label1.config = { shiftX: 28, shiftY: 17 };
         this.label1.wait = 1500;
 
         this.label2.name = 'label2';
         this.label2.className = 'point point-2 right';
-        this.label2.innerText = 'only 16g pen weight';
+        this.label2.innerText = 'click somewhere to interact with';
         this.label2.config = { shiftX: -200, shiftY: 17 };
         this.label2.wait = 2000;
 

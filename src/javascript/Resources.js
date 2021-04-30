@@ -3,7 +3,8 @@ import EventEmitter from './Utils/EventEmitter';
 
 import penSource from '../models/role/pen.glb';
 import penMinSource from '../models/role/pen.min.glb';
-// import penTextureSource from '../models/role/pen.jpg';
+import scene1Source from '../models/scene1/scene1.glb';
+import scene1TextureSource from '../models/scene1/scene1.jpg';
 import spotSource from '../models/particles/spot.png';
 
 export default class Resources extends EventEmitter {
@@ -30,7 +31,8 @@ export default class Resources extends EventEmitter {
         this.loader.load([
             { name: 'pen', source: penSource },
             { name: 'penMin', source: penMinSource },
-            // { name: 'penTexture', source: penTextureSource },
+            { name: 'scene1', source: scene1Source },
+            { name: 'scene1Texture', source: scene1TextureSource },
             { name: 'spot', source: spotSource },
         ]);
     }

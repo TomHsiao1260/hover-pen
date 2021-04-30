@@ -207,15 +207,12 @@ export default class Role {
             this.intersects = this.controls.raycaster.intersectObjects([this.penBox]);
             if (this.intersects.length && !this.timeline.isActive()) {
                 this.parameters.spinning = true;
-                this.path.forEach((value) => {
-                    const obj = { ...value };
-                    const { target, label } = obj;
-                    delete obj.target;
-                    delete obj.label;
+                this.path.forEach((obj) => {
+                    const { target, label, ...props } = obj;
                     if (label) {
-                        this.timeline.to(target, obj, label);
+                        this.timeline.to(target, props, label);
                     } else {
-                        this.timeline.to(target, obj);
+                        this.timeline.to(target, props);
                     }
                 });
                 await this.timeline;
@@ -279,10 +276,12 @@ export default class Role {
         }, () => this.$canvas.classList.remove('hover'));
     }
 
-    setPenMin() {
-        this.timeline.add(() => {
+    setFirstSceneTransition() {
+        this.timeline.add(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+
             this.instance.visible = false;
             this.instanceMin.visible = true;
-        }, 'firstSceneStart');
+        }, 'sceneStart');
     }
 }
