@@ -110,6 +110,7 @@ export default class World {
     setScene1() {
         this.scene1 = new Scene1({
             time: this.time,
+            sizes: this.sizes,
             debug: this.debug,
             camera: this.camera,
             timeline: this.timeline,

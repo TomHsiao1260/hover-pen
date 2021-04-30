@@ -1,0 +1,52 @@
+.content
+{
+    opacity: 0;
+    visibility: hidden;
+    user-select: none;
+    white-space: nowrap;
+    font-family: Arial, Helvetica, sans-serif;
+    transition: opacity 4.0s 0s ease-in-out;
+    &.visible
+    {
+        visibility: visible;
+        opacity: 0.6;
+    }
+    .text
+    {
+        position: absolute;
+        color: white;
+        opacity: 0;
+        animation: blink 8s ease-in-out infinite alternate;
+        &.title
+        {
+            font-size: 45px;
+        }
+        &.intro
+        {
+            font-size: 30px;
+        }
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1.0;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .content
+    {
+        .text.title
+        {
+            font-size: 25px;
+        }
+        .text.intro
+        {
+            font-size: 15px;
+        }
+    }
+}

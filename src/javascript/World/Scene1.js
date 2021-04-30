@@ -3,6 +3,7 @@ import * as THREE from 'three';
 export default class Scene1 {
     constructor(_option) {
         this.time = _option.time;
+        this.sizes = _option.sizes;
         this.camera = _option.camera;
         this.timeline = _option.timeline;
         this.debug = _option.debug;
@@ -18,11 +19,12 @@ export default class Scene1 {
             // this.debugFolder.open();
         }
 
-        this.setup();
+        this.setScene();
+        this.setDOM();
         this.setTraverse();
     }
 
-    setup() {
+    setScene() {
         this.parameters = {};
         this.parameters.rotate = 1.2;
 
@@ -32,6 +34,47 @@ export default class Scene1 {
         this.instance.visible = false;
         this.instance.rotation.y = Math.PI * this.parameters.rotate;
         this.container.add(this.instance);
+
+        this.text = [];
+        this.text1 = {};
+        this.text2 = {};
+        this.text.push(this.text1);
+        this.text.push(this.text2);
+
+        this.text1.name = 'text1';
+        this.text1.className = 'text intro';
+        this.text1.innerText = 'An Unique Decoration';
+        this.text1.config = { top: '18%', right: '13%' };
+
+        this.text2.name = 'text2';
+        this.text2.className = 'text intro';
+        this.text2.innerText = 'Inspire your Creativity';
+        this.text2.config = { bottom: '22%', left: '10%' };
+
+        // texts positioning parameters (on mobile)
+        if (this.sizes.width < 768) {
+            this.text1.config = { top: '22%', right: '3%' };
+            this.text2.config = { bottom: '20%', left: '3%' };
+        }
+    }
+
+    setDOM() {
+        this.$content = document.querySelector('.content');
+
+        this.text.forEach((value) => {
+            const text = value;
+
+            text.$point = document.createElement('DIV');
+            text.$point.className = text.className;
+            text.$point.innerText = text.innerText;
+
+            text.$point.style.top = text.config.top;
+            text.$point.style.bottom = text.config.bottom;
+            text.$point.style.right = text.config.right;
+            text.$point.style.left = text.config.left;
+
+            this.$content.appendChild(text.$point);
+        });
     }
 
     setTraverse() {

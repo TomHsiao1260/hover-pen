@@ -44,6 +44,7 @@ export default class Transitions {
         await this.timeline;
 
         this.timeline.clear();
+        this.scene1.$content.classList.add('visible');
         this.camera.controls.enabled = true;
     }
 
