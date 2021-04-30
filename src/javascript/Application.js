@@ -52,7 +52,7 @@ export default class Application {
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
         this.renderer.physicallyCorrectLights = true;
-        // this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 3;
         this.renderer.outputEncoding = THREE.sRGBEncoding;
 
@@ -96,6 +96,7 @@ export default class Application {
             debug: this.debug,
             light: this.light,
             timeline: this.timeline,
+            renderer: this.renderer,
         });
 
         this.scene.add(this.world.container);

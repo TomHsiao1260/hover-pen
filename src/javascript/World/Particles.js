@@ -28,7 +28,8 @@ export default class Particles {
     setGeometry() {
         this.parameters = {};
         this.parameters.counts = 200;
-        this.parameters.speed = 0.01;
+        this.parameters.speed = 0.1;
+        this.parameters.centerSpeed = 0.01;
 
         this.vertexPosition = new Float32Array(this.parameters.counts * 3);
         this.vertexRandom = new Float32Array(this.parameters.counts * 3);
@@ -58,9 +59,10 @@ export default class Particles {
         this.material = this.materials.items.shader.particles;
         this.instance = new THREE.Points(this.geometry, this.material);
         this.container.add(this.instance);
+        this.instance.renderOrder = 1;
 
-        this.parameters.uWidth = this.material.uniforms.uWidth;
-        this.parameters.uSize = this.material.uniforms.uSize;
+        this.parameters.uWidth = this.material.uniforms.uWidth.value;
+        this.parameters.uSize = this.material.uniforms.uSize.value;
 
         if (this.debug) {
             this.axes = new THREE.AxesHelper();
@@ -68,13 +70,15 @@ export default class Particles {
             this.debugFolder.add(this.axes, 'visible').name('axes');
             this.debugFolder.add(this.material.uniforms.uSize, 'value').min(1).max(300).step(1).name('uSize');
             this.debugFolder.add(this.material.uniforms.uWidth, 'value').min(1).max(100).step(1).name('uWidth');
+            this.debugFolder.add(this.material.uniforms.uSpeed, 'value').min(0.001).max(0.5).step(0.0001).name('uSpeed');
             this.debugFolder.add(this.material.uniforms.uColorShift.value, 'x').min(-0.5).max(0.5).step(0.01).name('red shift');
             this.debugFolder.add(this.material.uniforms.uColorShift.value, 'y').min(-0.5).max(0.5).step(0.01).name('green shift');
             this.debugFolder.add(this.material.uniforms.uColorShift.value, 'z').min(-0.5).max(0.5).step(0.01).name('blue shift');
         }
 
         this.callbacks.drift = this.time.on('tick', () => {
-            this.material.uniforms.uTime.value = this.time.elapsed / 1000;
+            const delta = this.parameters.speed * this.time.delta / 1000;
+            this.material.uniforms.uTime.value += delta;
         });
     }
 
@@ -127,7 +131,7 @@ export default class Particles {
             // particles system positioning
             const factor = this.controls.mouse.y > 0 ? modify : 1;
             const target = this.penBodyPosition.clone().multiplyScalar(this.controls.mouse.y * factor);
-            const movement = target.sub(this.instance.position).multiplyScalar(this.parameters.speed);
+            const movement = target.sub(this.instance.position).multiplyScalar(this.parameters.centerSpeed);
             this.instance.position.add(movement);
 
             // particles system resize
@@ -185,26 +189,37 @@ export default class Particles {
     setFirstSceneTransition() {
         const targetA = this.material.uniforms.uWidth;
         const targetB = this.material.uniforms.uSize;
-        const valueA = this.parameters.uWidth.value;
-        const valueB = this.parameters.uSize.value;
+        const targetC = this.parameters;
+        const targetD = this.instance.position;
+
+        const valueA = this.parameters.uWidth;
+        const valueB = this.parameters.uSize;
+        const valueC = this.parameters.speed;
+        const valueD = new THREE.Vector3(-19, -3.4, 1.2);
 
         this.path = [];
         this.path.push({ delay: 0,
-                         duration: 5.0,
+                         duration: 10.0,
                          ease: 'Power1.easeOut',
-                         valueA: 3.0 * valueA,
-                         valueB: 3.0 * valueB,
+                         valueA: 15.0 * valueA,
+                         valueB: 5.0 * valueB,
+                         valueC: 0.1 * valueC,
+                         xD: valueD.x,
+                         yD: valueD.y,
+                         zD: valueD.z,
                          label: 'particleExpand',
                          addTo: 'sceneStart',
         });
 
         this.path.forEach((obj) => {
             const { label, addTo, ...props } = obj;
-            const { valueA, valueB, ...common } = props;
+            const { valueA, valueB, valueC, xD, yD, zD, ...common } = props;
 
             this.timeline.addLabel(label, addTo);
             this.timeline.to(targetA, { value: valueA, ...common }, label);
             this.timeline.to(targetB, { value: valueB, ...common }, label);
+            this.timeline.to(targetC, { speed: valueC, ...common }, label);
+            this.timeline.to(targetD, { x: xD, y: yD, z: zD, ...common }, label);
         });
     }
 }

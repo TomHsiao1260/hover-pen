@@ -52,7 +52,7 @@ void main()
 
     // cnoise positioning
     vec3  rr = 3.0 * aRandomness;
-    float tt = 0.1 * uTime;
+    float tt = uTime;
     float r  = uWidth / 4.0;
     float xx = cnoise(rr.xy + tt) * r;
     float yy = cnoise(rr.yz + tt) * r;

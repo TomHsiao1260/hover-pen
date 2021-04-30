@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 export default class Transitions {
     constructor(_option) {
         this.time = _option.time;
@@ -8,10 +10,12 @@ export default class Transitions {
         this.labels = _option.labels;
         this.light = _option.light;
         this.timeline = _option.timeline;
+        this.renderer = _option.renderer;
     }
 
     async penFocus() {
         this.camera.controls.enabled = false;
+
         this.camera.setPenTransition();
         this.particles.setPenTransition();
         this.light.setPenTransition();
@@ -23,15 +27,19 @@ export default class Transitions {
         this.role.setColor();
         this.role.setMouse();
         this.particles.setControls();
+
         this.camera.controls.enabled = true;
     }
 
     async firstSceneFocus() {
         this.camera.controls.enabled = false;
+        this.renderer.toneMapping = THREE.NoToneMapping;
+
         this.scene1.setFirstSceneTransition();
         this.role.setFirstSceneTransition();
         this.particles.setFirstSceneTransition();
         this.camera.setFirstSceneTransition();
+        this.light.setFirstSceneTransition();
 
         await this.timeline;
 

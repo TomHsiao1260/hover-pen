@@ -34,7 +34,7 @@ export default class Camera {
 
     setInstance() {
         const { width, height } = this.sizes.viewport;
-        this.instance = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
+        this.instance = new THREE.PerspectiveCamera(75, width / height, 0.1, 150);
         this.instance.position.set(-2.0, -1.2, -2.2);
         this.instance.position.multiplyScalar(this.scale);
         this.container.add(this.instance);
@@ -97,18 +97,20 @@ export default class Camera {
         const targetA = this.controls.target;
         const targetB = this.instance.position;
 
-        const vectorA = new THREE.Vector3(-19, -3.4, -1.2);
-        const vectorB = new THREE.Vector3(-4.2, 22, 35);
+        this.scene1 = {};
+        this.scene1.targetPosition = new THREE.Vector3(-19, -3.4, -1.2);
+        this.scene1.cameraPosition = new THREE.Vector3(-4.2, 22, 35);
+        if (this.sizes.width < 768) this.scene1.cameraPosition = new THREE.Vector3(-4.3, 29, 43);
 
         this.path = [];
         this.path.push({ delay: 0,
-                         duration: 3.0,
-                         xA: vectorA.x,
-                         yA: vectorA.y,
-                         zA: vectorA.z,
-                         xB: (vectorB.x - vectorA.x) * this.scale + vectorA.x,
-                         yB: (vectorB.y - vectorA.y) * this.scale + vectorA.y,
-                         zB: (vectorB.z - vectorA.z) * this.scale + vectorA.z,
+                         duration: 10.0,
+                         xA: this.scene1.targetPosition.x,
+                         yA: this.scene1.targetPosition.y,
+                         zA: this.scene1.targetPosition.z,
+                         xB: this.scene1.cameraPosition.x,
+                         yB: this.scene1.cameraPosition.y,
+                         zB: this.scene1.cameraPosition.z,
                          ease: 'Power1.easeOut',
                          label: 'cameraToScene',
                          addTo: 'sceneStart',

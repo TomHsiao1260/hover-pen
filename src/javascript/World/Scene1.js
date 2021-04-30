@@ -62,8 +62,8 @@ export default class Scene1 {
     }
 
     setFirstSceneTransition() {
-        this.book.scale.set(1.00, 0.01, 0.95);
-        this.merge1.scale.set(0.01, 0.01, 0.01);
+        this.book.scale.set(1.00, 0.2, 0.95);
+        this.merge1.scale.set(0.0, 0.5, 0.0);
         this.instance.visible = true;
 
         const targetA = this.merge1.scale;
@@ -72,16 +72,16 @@ export default class Scene1 {
         this.path = [];
         this.path.push({ target: targetA,
                          delay: 3.0,
-                         duration: 0.8,
+                         duration: 1.2,
                          x: 1,
                          z: 1,
                          ease: 'Bounce.easeOut',
                          label: 'sceneStart',
         });
         this.path.push({ target: targetA,
-                         delay: 0.2,
+                         delay: 1.0,
                          duration: 0.5,
-                         y: 1,
+                         y: 1.0,
                          ease: 'Power1.easeOut',
                          label: '<',
         });

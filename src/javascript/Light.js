@@ -77,4 +77,40 @@ export default class Light {
             this.timeline.to(targetC, { y: yC, ...common }, label);
         });
     }
+
+    setFirstSceneTransition() {
+        const targetA = this.pointLight;
+        const targetB = this.directionalLight;
+        const targetC = this.directionalLight.position;
+
+        this.path = [];
+        this.path.push({ delay: 0,
+                         duration: 1.0,
+                         intensityA: 5,
+                         intensityB: 0,
+                         yC: -10,
+                         ease: 'Power1.easeOut',
+                         label: 'lightDark',
+                         addTo: 'sceneStart',
+        });
+        this.path.push({ delay: 1.0,
+                         duration: 5,
+                         intensityA: targetA.intensity,
+                         intensityB: targetB.intensity,
+                         yC: targetC.y,
+                         ease: 'Power1.easeOut',
+                         label: 'lightNormal',
+                         addTo: '>',
+        });
+
+        this.path.forEach((obj) => {
+            const { label, addTo, ...props } = obj;
+            const { intensityA, intensityB, yC, ...common } = props;
+
+            this.timeline.addLabel(label, addTo);
+            this.timeline.to(targetA, { intensity: intensityA, ...common }, label);
+            this.timeline.to(targetB, { intensity: intensityB, ...common }, label);
+            this.timeline.to(targetC, { y: yC, ...common }, label);
+        });
+    }
 }

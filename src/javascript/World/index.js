@@ -19,6 +19,7 @@ export default class World {
         this.debug = _option.debug;
         this.light = _option.light;
         this.timeline = _option.timeline;
+        this.renderer = _option.renderer;
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
@@ -129,6 +130,7 @@ export default class World {
             labels: this.labels,
             light: this.light,
             timeline: this.timeline,
+            renderer: this.renderer,
         });
     }
 }
