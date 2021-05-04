@@ -1,0 +1,66 @@
+$color1: #808080;
+$color2: #cccccc;
+
+.content > .next
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    opacity: 0;
+    visibility: hidden;
+    user-select: none;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    transition: opacity 4.0s 0s ease-in-out;
+    .text
+    {
+        padding: 6px;
+        font-size: 25px;
+        color: $color1;
+    }
+    svg
+    {
+        padding: 6px;
+        width: 40px;
+        height: 20px;
+        stroke: $color1;
+    }
+    &.visible
+    {
+        visibility: visible;
+        opacity: 1.0;
+    }
+    &:hover
+    {
+        transform: translate(-50%, 0%) scale(1.1);
+        .text
+        {
+            color: $color2;
+        }
+        svg
+        {
+            stroke: $color2;
+        }
+    }
+}
+
+@media screen and (max-width:768px) {
+    .content > .next
+    {
+        .text
+        {
+            padding: 4px;
+            font-size: 15px;
+        }
+        svg
+        {
+            padding: 4px;
+            width: 30px;
+            height: 15px;
+        }
+    }
+}

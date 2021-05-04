@@ -20,6 +20,7 @@ export default class World {
         this.light = _option.light;
         this.timeline = _option.timeline;
         this.renderer = _option.renderer;
+        this.view = _option.view;
 
         this.container = new THREE.Object3D();
         this.container.matrixAutoUpdate = false;
@@ -51,10 +52,11 @@ export default class World {
         this.setTransition();
 
         await this.transitions.penFocus();
-        await new Promise((resolve) => setTimeout(resolve, 15000));
 
-        await this.transitions.removePenCallbacks();
-        await this.transitions.firstSceneFocus();
+        this.view.cover.$next.onclick = async () => {
+            await this.transitions.removePenCallbacks();
+            await this.transitions.firstSceneFocus();
+        };
     }
 
     setControls() {
@@ -132,6 +134,7 @@ export default class World {
             light: this.light,
             timeline: this.timeline,
             renderer: this.renderer,
+            view: this.view,
         });
     }
 }

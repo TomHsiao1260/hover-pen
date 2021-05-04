@@ -70,10 +70,10 @@ export default class Particles {
             this.debugFolder.add(this.axes, 'visible').name('axes');
             this.debugFolder.add(this.material.uniforms.uSize, 'value').min(1).max(300).step(1).name('uSize');
             this.debugFolder.add(this.material.uniforms.uWidth, 'value').min(1).max(100).step(1).name('uWidth');
-            this.debugFolder.add(this.material.uniforms.uSpeed, 'value').min(0.001).max(0.5).step(0.0001).name('uSpeed');
             this.debugFolder.add(this.material.uniforms.uColorShift.value, 'x').min(-0.5).max(0.5).step(0.01).name('red shift');
             this.debugFolder.add(this.material.uniforms.uColorShift.value, 'y').min(-0.5).max(0.5).step(0.01).name('green shift');
             this.debugFolder.add(this.material.uniforms.uColorShift.value, 'z').min(-0.5).max(0.5).step(0.01).name('blue shift');
+            this.debugFolder.add(this.parameters, 'speed').min(0.001).max(0.5).step(0.0001).name('speed');
         }
 
         this.callbacks.drift = this.time.on('tick', () => {

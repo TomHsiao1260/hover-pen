@@ -9,6 +9,7 @@ import Resources from './Resources';
 import Camera from './Camera';
 import Light from './Light';
 import World from './World';
+import View from './View';
 
 export default class Application {
     constructor(_option) {
@@ -25,6 +26,7 @@ export default class Application {
         this.setRenderer();
         this.setCamera();
         this.setLight();
+        this.setView();
         this.setWorld();
     }
 
@@ -86,6 +88,10 @@ export default class Application {
         this.scene.add(this.light.container);
     }
 
+    setView() {
+        this.view = new View();
+    }
+
     setWorld() {
         this.world = new World({
             $canvas: this.$canvas,
@@ -97,6 +103,7 @@ export default class Application {
             light: this.light,
             timeline: this.timeline,
             renderer: this.renderer,
+            view: this.view,
         });
 
         this.scene.add(this.world.container);

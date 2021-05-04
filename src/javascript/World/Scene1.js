@@ -42,14 +42,14 @@ export default class Scene1 {
         this.text.push(this.text2);
 
         this.text1.name = 'text1';
-        this.text1.className = 'text intro';
+        this.text1.className = 'intro';
         this.text1.innerText = 'An Unique Decoration';
         this.text1.config = { top: '18%', right: '13%' };
 
         this.text2.name = 'text2';
-        this.text2.className = 'text intro';
+        this.text2.className = 'intro';
         this.text2.innerText = 'Inspire your Creativity';
-        this.text2.config = { bottom: '22%', left: '10%' };
+        this.text2.config = { bottom: '22%', left: '13%' };
 
         // texts positioning parameters (on mobile)
         if (this.sizes.width < 768) {
@@ -60,6 +60,10 @@ export default class Scene1 {
 
     setDOM() {
         this.$content = document.querySelector('.content');
+
+        this.$text = document.createElement('DIV');
+        this.$text.className = 'text';
+        this.$content.appendChild(this.$text);
 
         this.text.forEach((value) => {
             const text = value;
@@ -73,7 +77,7 @@ export default class Scene1 {
             text.$point.style.right = text.config.right;
             text.$point.style.left = text.config.left;
 
-            this.$content.appendChild(text.$point);
+            this.$text.appendChild(text.$point);
         });
     }
 
