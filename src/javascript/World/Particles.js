@@ -29,7 +29,7 @@ export default class Particles {
         this.parameters = {};
         this.parameters.counts = 200;
         this.parameters.speed = 0.1;
-        this.parameters.centerSpeed = 0.01;
+        this.parameters.centerSpeed = 0.005;
 
         this.vertexPosition = new Float32Array(this.parameters.counts * 3);
         this.vertexRandom = new Float32Array(this.parameters.counts * 3);

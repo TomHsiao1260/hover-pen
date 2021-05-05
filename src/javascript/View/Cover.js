@@ -8,6 +8,8 @@ export default class Cover {
     setDOM() {
         this.$next = document.createElement('DIV');
         this.$next.className = 'next';
+        this.$next.style.opacity = 0;
+        this.$next.style.display = 'none';
         this.$nextText = document.createElement('DIV');
         this.$nextText.className = 'text';
         this.$nextText.innerText = 'next';
@@ -25,5 +27,16 @@ export default class Cover {
         this.$content.appendChild(this.$next);
         this.$next.appendChild(this.$nextText);
         this.$next.appendChild(this.$markSVG);
+    }
+
+    async visible() {
+        this.$next.style.display = 'flex';
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        this.$next.style.opacity = 1.0;
+    }
+
+    async hidden() {
+        this.$next.style.opacity = 0;
+        this.$next.style.display = 'none';
     }
 }

@@ -89,7 +89,9 @@ export default class Application {
     }
 
     setView() {
-        this.view = new View();
+        this.view = new View({
+            sizes: this.sizes,
+        });
     }
 
     setWorld() {

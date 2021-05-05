@@ -16,7 +16,6 @@ export default class Transitions {
 
     async penFocus() {
         this.camera.controls.enabled = false;
-
         this.camera.setPenTransition();
         this.particles.setPenTransition();
         this.light.setPenTransition();
@@ -28,15 +27,14 @@ export default class Transitions {
         this.role.setColor();
         this.role.setMouse();
         this.particles.setControls();
-        this.view.cover.$next.classList.add('visible');
-
+        this.view.cover.visible();
         this.camera.controls.enabled = true;
     }
 
     async firstSceneFocus() {
         this.camera.controls.enabled = false;
         this.renderer.toneMapping = THREE.NoToneMapping;
-        this.view.cover.$next.classList.remove('visible');
+        this.view.cover.hidden();
 
         this.scene1.setFirstSceneTransition();
         this.role.setFirstSceneTransition();
@@ -47,7 +45,7 @@ export default class Transitions {
         await this.timeline;
 
         this.timeline.clear();
-        this.scene1.$text.classList.add('visible');
+        this.view.scene1.visible();
         this.camera.controls.enabled = true;
     }
 

@@ -10,8 +10,6 @@ $color2: #cccccc;
     bottom: 5%;
     left: 50%;
     transform: translate(-50%, 0%);
-    opacity: 0;
-    visibility: hidden;
     user-select: none;
     cursor: pointer;
     font-family: Arial, Helvetica, sans-serif;
@@ -29,14 +27,9 @@ $color2: #cccccc;
         height: 20px;
         stroke: $color1;
     }
-    &.visible
-    {
-        visibility: visible;
-        opacity: 1.0;
-    }
     &:hover
     {
-        transform: translate(-50%, 0%) scale(1.1);
+        transform: translate(-50%, 0%) scale(1.05);
         .text
         {
             color: $color2;
