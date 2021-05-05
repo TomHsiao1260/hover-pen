@@ -51,12 +51,14 @@ export default class World {
         this.setScene1();
         this.setTransition();
 
+        // pen only scene
         await this.transitions.penFocus();
+        await new Promise((resolve) => { this.view.cover.$next.onclick = resolve; });
 
-        this.view.cover.$next.onclick = async () => {
-            await this.transitions.removePenCallbacks();
-            await this.transitions.firstSceneFocus();
-        };
+        // the first scene
+        await this.transitions.removePenCallbacks();
+        await this.transitions.firstSceneFocus();
+        await new Promise((resolve) => { this.view.cover.$next.onclick = resolve; });
     }
 
     setControls() {

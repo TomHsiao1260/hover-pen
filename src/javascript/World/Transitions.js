@@ -29,6 +29,8 @@ export default class Transitions {
         this.particles.setControls();
         this.view.cover.visible();
         this.camera.controls.enabled = true;
+
+        await new Promise((resolve) => setTimeout(resolve, 3000));
     }
 
     async firstSceneFocus() {
